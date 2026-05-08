@@ -1478,6 +1478,8 @@ document.addEventListener('DOMContentLoaded', function() {
   document.getElementById('file-input-bm').addEventListener('change', e => handleFileInput(e, 'bm'));
 });
 
+// ─── Status helper ────────────────────────────────────────────────────────────
+function showStatus(id, type, msg) {
   const el = document.getElementById(id);
   el.className = 'status ' + type;
   el.innerHTML = msg;
