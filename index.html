@@ -357,10 +357,14 @@
   .api-note { font-size: 0.8rem; color: #9a8a72; margin-top: 6px; font-style: italic; }
 
   @media print {
-    header, .section:not(#results-section .section), .btn, #results-section > .section:first-child { display: none !important; }
+    .section { display: none !important; }
     #results-section { display: block !important; }
+    #results-section .section { display: block !important; }
+    .btn { display: none !important; }
+    header { display: block !important; }
     body { font-size: 11px; }
     table.results { font-size: 10px; }
+    .results-header .btn-small { display: none !important; }
   }
 </style>
 </head>
