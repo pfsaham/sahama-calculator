@@ -448,15 +448,15 @@
     <div class="upload-area" id="upload-area" tabindex="0"
       
       <p>📋 Click here then paste your screenshot (Command+V / Ctrl+V)<br>— or —</p>
-      <button class="btn btn-small" id="choose-file-btn">Choose File</button>
-      <input type="file" id="file-input" accept="image/*">
+      <button class="btn btn-small" id="choose-file-btn" onclick="document.getElementById('file-input').click()">Choose File</button>
+      <input type="file" id="file-input" accept="image/*" onchange="handleFileInput(event, 'astro')">
     </div>
     <img id="preview-img" alt="Chart preview" style="max-width:100%;max-height:220px;border:1px solid var(--rule);border-radius:3px;margin-top:12px;display:none;">
     <div id="extract-status" class="status"></div>
     <div id="extracted-data" style="display:none; margin-top:16px;">
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
         <span style="font-family:'Cinzel',serif; font-size:0.85rem; color:var(--accent);">Extracted Longitudes — verify and correct if needed</span>
-        <button class="btn btn-small" id="re-extract-btn"><span id="re-extract-spinner" style="display:none" class="spinner"></span>Re-extract</button>
+        <button class="btn btn-small" id="re-extract-btn" onclick="extractFromImage()"><span id="re-extract-spinner" style="display:none" class="spinner"></span>Re-extract</button>
       </div>
       <div class="extracted-grid" id="extracted-grid"></div>
     </div>
@@ -469,15 +469,15 @@
     <div class="upload-area" id="upload-area-bm" tabindex="0"
       
       <p>📋 Click here then paste your screenshot (Command+V / Ctrl+V)<br>— or —</p>
-      <button class="btn btn-small" id="choose-file-bm-btn">Choose File</button>
-      <input type="file" id="file-input-bm" accept="image/*">
+      <button class="btn btn-small" id="choose-file-bm-btn" onclick="document.getElementById('file-input-bm').click()">Choose File</button>
+      <input type="file" id="file-input-bm" accept="image/*" onchange="handleFileInput(event, 'bm')">
     </div>
     <img id="preview-img-bm" alt="House cusps preview" style="max-width:100%;max-height:220px;border:1px solid var(--rule);border-radius:3px;margin-top:12px;display:none;">
     <div id="bm-extract-status" class="status"></div>
     <div id="bm-extracted-data" style="display:none; margin-top:16px;">
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
         <span style="font-family:'Cinzel',serif; font-size:0.85rem; color:var(--accent);">Extracted Bhāva Madhyas — verify and correct if needed</span>
-        <button class="btn btn-small" id="re-extract-bm-btn"><span id="re-extract-bm-spinner" style="display:none" class="spinner"></span>Re-extract</button>
+        <button class="btn btn-small" id="re-extract-bm-btn" onclick="extractBMFromImage()"><span id="re-extract-bm-spinner" style="display:none" class="spinner"></span>Re-extract</button>
       </div>
       <div class="extracted-grid" id="bm-extracted-grid"></div>
     </div>
@@ -488,8 +488,8 @@
     <h2>Step 3 — Chart Type</h2>
     <div class="dn-toggle">
       <label>Chart type:</label>
-      <button class="toggle-btn active" id="btn-day">D — Diurnal (Sun above horizon)</button>
-      <button class="toggle-btn" id="btn-night">N — Nocturnal (Sun below horizon)</button>
+      <button class="toggle-btn active" id="btn-day" onclick="setDN('D')">D — Diurnal (Sun above horizon)</button>
+      <button class="toggle-btn" id="btn-night" onclick="setDN('N')">N — Nocturnal (Sun below horizon)</button>
     </div>
     <p style="font-size:0.85rem; color:#7a6a52; font-style:italic;">Diurnal = Sun above the horizon at the moment of the Varṣa-Praveśa. Nocturnal = Sun below the horizon.</p>
   </div>
@@ -498,7 +498,7 @@
   <div class="section">
     <h2>Step 4 — Calculate</h2>
     <div class="calc-row">
-      <button class="btn" id="calc-btn" >
+      <button class="btn" id="calc-btn" onclick="calculateAll()">
         <span id="calc-spinner" style="display:none" class="spinner"></span>
         Calculate All 51 Sahamas
       </button>
@@ -512,7 +512,7 @@
       <div class="results-header">
         <h2 style="border:none; padding:0; margin:0;">Results — All 51 Sahamas</h2>
         <div>
-          <button class="btn btn-small" id="print-btn">Print / Save PDF</button>
+          <button class="btn btn-small" id="print-btn" onclick="window.print()">Print / Save PDF</button>
         </div>
       </div>
       <div id="chart-info-bar" class="chart-info"></div>
