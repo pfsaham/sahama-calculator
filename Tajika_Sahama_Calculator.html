@@ -1,0 +1,1489 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tājika Sahama Calculator</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,600;1,400&family=Cinzel:wght@400;600&display=swap');
+
+  :root {
+    --ink: #1a1a1a;
+    --paper: #faf8f3;
+    --parchment: #f0ead8;
+    --rule: #c8b89a;
+    --accent: #5c3d1e;
+    --gold: #8b6914;
+    --light-rule: #e0d8c8;
+    --header-bg: #2c2018;
+    --header-text: #f0e4c8;
+    --alt-row: #f5f0e8;
+    --yes-bg: #f8f0e8;
+    --no-bg: #f0f5e8;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'EB Garamond', Georgia, serif;
+    background: var(--paper);
+    color: var(--ink);
+    font-size: 16px;
+    line-height: 1.5;
+  }
+
+  header {
+    background: var(--header-bg);
+    color: var(--header-text);
+    text-align: center;
+    padding: 28px 20px 20px;
+    border-bottom: 3px solid var(--gold);
+  }
+
+  header h1 {
+    font-family: 'Cinzel', serif;
+    font-size: 1.9rem;
+    letter-spacing: 0.04em;
+    color: #f0e4c8;
+    margin-bottom: 6px;
+  }
+
+  header p {
+    font-size: 0.95rem;
+    color: #c8b89a;
+    font-style: italic;
+  }
+
+  .container {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 28px 20px 60px;
+  }
+
+  .section {
+    background: var(--parchment);
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+    padding: 22px 24px;
+    margin-bottom: 22px;
+  }
+
+  .section h2 {
+    font-family: 'Cinzel', serif;
+    font-size: 1.05rem;
+    color: var(--accent);
+    border-bottom: 1px solid var(--rule);
+    padding-bottom: 8px;
+    margin-bottom: 16px;
+    letter-spacing: 0.03em;
+  }
+
+  /* Upload area */
+  .upload-area {
+    border: 2px dashed var(--rule);
+    border-radius: 4px;
+    padding: 30px;
+    text-align: center;
+    cursor: pointer;
+    transition: background 0.2s;
+    background: var(--paper);
+  }
+  .upload-area:hover { background: #ede8dc; }
+  .upload-area.dragover { background: #e8e0cc; border-color: var(--accent); }
+  .upload-area p { color: #7a6a52; font-style: italic; margin-bottom: 10px; }
+  .upload-area input { display: none; }
+
+  .btn {
+    display: inline-block;
+    background: var(--accent);
+    color: #f0e4c8;
+    border: none;
+    padding: 9px 22px;
+    font-family: 'Cinzel', serif;
+    font-size: 0.85rem;
+    letter-spacing: 0.05em;
+    cursor: pointer;
+    border-radius: 3px;
+    transition: background 0.2s;
+  }
+  .btn:hover { background: #7a5228; }
+  .btn:disabled { background: #a09080; cursor: not-allowed; }
+  .btn-small {
+    padding: 6px 14px;
+    font-size: 0.78rem;
+  }
+
+  #preview-img {
+    max-width: 100%;
+    max-height: 220px;
+    border: 1px solid var(--rule);
+    border-radius: 3px;
+    margin-top: 12px;
+    display: none;
+  }
+
+  /* Extracted data display */
+  .extracted-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 8px;
+    margin-top: 12px;
+  }
+  .extracted-item {
+    background: var(--paper);
+    border: 1px solid var(--light-rule);
+    border-radius: 3px;
+    padding: 6px 10px;
+    font-size: 0.9rem;
+  }
+  .extracted-item label {
+    font-weight: 600;
+    color: var(--accent);
+    display: block;
+    font-size: 0.8rem;
+    font-family: 'Cinzel', serif;
+  }
+  .extracted-item input {
+    width: 100%;
+    border: none;
+    background: transparent;
+    font-family: 'EB Garamond', serif;
+    font-size: 0.95rem;
+    color: var(--ink);
+    outline: none;
+    padding: 2px 0;
+    border-bottom: 1px solid var(--light-rule);
+  }
+  .extracted-item input:focus { border-bottom-color: var(--accent); }
+
+  /* D/N toggle */
+  .dn-toggle {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 16px;
+  }
+  .dn-toggle label {
+    font-family: 'Cinzel', serif;
+    font-size: 0.9rem;
+    color: var(--accent);
+  }
+  .toggle-btn {
+    padding: 7px 20px;
+    border: 2px solid var(--rule);
+    background: var(--paper);
+    font-family: 'Cinzel', serif;
+    font-size: 0.85rem;
+    cursor: pointer;
+    border-radius: 3px;
+    color: #7a6a52;
+    transition: all 0.15s;
+  }
+  .toggle-btn.active {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #f0e4c8;
+  }
+
+  /* BM inputs */
+  .bm-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 12px;
+  }
+  .bm-field label {
+    display: block;
+    font-family: 'Cinzel', serif;
+    font-size: 0.78rem;
+    color: var(--accent);
+    margin-bottom: 4px;
+  }
+  .bm-field input {
+    width: 100%;
+    padding: 7px 10px;
+    border: 1px solid var(--rule);
+    border-radius: 3px;
+    font-family: 'EB Garamond', serif;
+    font-size: 0.95rem;
+    background: var(--paper);
+    color: var(--ink);
+    outline: none;
+    transition: border-color 0.15s;
+  }
+  .bm-field input:focus { border-color: var(--accent); }
+  .bm-field .hint { font-size: 0.75rem; color: #9a8a72; margin-top: 2px; font-style: italic; }
+
+  /* Status messages */
+  .status {
+    padding: 10px 14px;
+    border-radius: 3px;
+    margin-top: 12px;
+    font-size: 0.9rem;
+    display: none;
+  }
+  .status.info { background: #e8f0f8; border: 1px solid #a8c0d8; color: #2c4a6a; display: block; }
+  .status.error { background: #f8e8e8; border: 1px solid #d8a8a8; color: #6a2c2c; display: block; }
+  .status.success { background: #e8f0e8; border: 1px solid #a8c8a8; color: #2c4a2c; display: block; }
+
+  /* Spinner */
+  .spinner {
+    display: inline-block;
+    width: 14px; height: 14px;
+    border: 2px solid #c8b89a;
+    border-top-color: var(--accent);
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+    vertical-align: middle;
+    margin-right: 6px;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* Calculate button area */
+  .calc-row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-top: 10px;
+  }
+
+  /* Results table */
+  #results-section { display: none; }
+
+  .results-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .chart-info {
+    font-size: 0.88rem;
+    color: #7a6a52;
+    font-style: italic;
+  }
+
+  .results-table-wrap {
+    overflow-x: auto;
+  }
+
+  table.results {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.88rem;
+  }
+
+  table.results thead tr {
+    background: var(--header-bg);
+    color: var(--header-text);
+  }
+
+  table.results thead th {
+    padding: 9px 10px;
+    text-align: left;
+    font-family: 'Cinzel', serif;
+    font-size: 0.75rem;
+    letter-spacing: 0.04em;
+    font-weight: 400;
+    white-space: nowrap;
+  }
+
+  table.results thead th:first-child,
+  table.results thead th:nth-child(3) { text-align: center; }
+
+  table.results tbody tr:nth-child(even) { background: var(--alt-row); }
+  table.results tbody tr:nth-child(odd) { background: var(--paper); }
+  table.results tbody tr.punya-row {
+    background: #fff8e0 !important;
+    font-weight: 600;
+  }
+
+  table.results td {
+    padding: 6px 10px;
+    border-bottom: 1px solid var(--light-rule);
+    vertical-align: middle;
+  }
+
+  table.results td:first-child { text-align: center; color: #7a6a52; font-size: 0.82rem; }
+  table.results td:nth-child(3) { text-align: center; }
+
+  .result-deg {
+    font-weight: 600;
+    color: var(--accent);
+  }
+
+  .saikatham-yes {
+    color: #6a3c1e;
+    font-size: 0.8rem;
+  }
+  .saikatham-no {
+    color: #4a6a3c;
+    font-size: 0.8rem;
+  }
+
+  .formula-cell {
+    font-size: 0.78rem;
+    color: #6a5a42;
+    font-style: italic;
+  }
+
+  .print-note {
+    font-size: 0.78rem;
+    color: #9a8a72;
+    font-style: italic;
+    margin-top: 14px;
+  }
+
+  /* API key input */
+  .api-row {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  .api-row input {
+    flex: 1;
+    min-width: 200px;
+    padding: 7px 10px;
+    border: 1px solid var(--rule);
+    border-radius: 3px;
+    font-family: 'EB Garamond', serif;
+    font-size: 0.95rem;
+    background: var(--paper);
+    outline: none;
+  }
+  .api-row input:focus { border-color: var(--accent); }
+  .api-note { font-size: 0.8rem; color: #9a8a72; margin-top: 6px; font-style: italic; }
+
+  @media print {
+    header, .section:not(#results-section .section), .btn, #results-section > .section:first-child { display: none !important; }
+    #results-section { display: block !important; }
+    body { font-size: 11px; }
+    table.results { font-size: 10px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Tājika Sahama Calculator</h1>
+  <p>51 Sahamas · Sidereal (Nirayana) · Tājika Nīlakaṇṭhī tradition · © Hart deFouw</p>
+</header>
+
+<div class="container">
+
+  <!-- HELP SECTION -->
+  <div class="section" id="help-section">
+    <h2>&#9432; Help &amp; Setup Instructions</h2>
+    <div id="help-content">
+
+      <div style="background:var(--paper); border:1px solid var(--light-rule); border-radius:4px; padding:18px 20px; margin-bottom:18px;">
+        <h3 style="font-family:'Cinzel',serif; font-size:0.95rem; color:var(--accent); margin-bottom:12px;">Part 1 — Before You Begin: Getting Your API Key</h3>
+
+        <p style="margin-bottom:10px;"><strong>What is an API key and why do I need one?</strong><br>
+        This tool uses an AI engine to read your chart images and extract all the planetary positions automatically. That AI engine is provided by <strong>Anthropic</strong> — the company that created it. To use their AI, you need a personal password called an API key. Anthropic's website generates this key for you automatically when you create an account. The AI itself does not generate the key — Anthropic's website does.</p>
+
+        <p style="margin-bottom:10px;"><strong>You only need to do this once.</strong> After that, you just paste your key into the tool each time you open it.</p>
+
+        <p style="margin-bottom:6px;"><strong>Step-by-step:</strong></p>
+        <ol style="margin-left:20px; margin-bottom:12px; line-height:2;">
+          <li>Open your web browser and go to <strong>console.anthropic.com</strong></li>
+          <li>Click <strong>Sign Up</strong> and create a free account with your email address and a password</li>
+          <li>Once logged in, look in the left-side menu for <strong>Billing</strong> — click it</li>
+          <li>Add a credit card and make a minimum deposit of <strong>$5.00</strong>. This activates your account. You will not be charged anything beyond what you deposit.</li>
+          <li>Now look in the left-side menu for <strong>API Keys</strong> — click it</li>
+          <li>Click the button that says <strong>Create Key</strong>. Give it any name you like — for example "Sahama Tool"</li>
+          <li>Your key will appear on screen. It is a long string of characters that looks like this:<br>
+          <code style="background:#e8e0cc; padding:3px 8px; border-radius:3px; font-size:0.85rem;">sk-ant-api03-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</code></li>
+          <li><strong>Copy it immediately</strong> — Anthropic only shows it to you once. Paste it somewhere safe like a notes app or document on your computer.</li>
+          <li>Keep your key private. Treat it like a password — do not share it with others.</li>
+        </ol>
+
+        <p style="background:#f0f5e8; border:1px solid #a8c8a8; border-radius:3px; padding:10px 14px; font-size:0.88rem;">
+          <strong>If you ever lose your key</strong> or think someone else has seen it, simply go back to console.anthropic.com, delete the old key, and create a new one.
+        </p>
+      </div>
+
+      <div style="background:var(--paper); border:1px solid var(--light-rule); border-radius:4px; padding:18px 20px; margin-bottom:18px;">
+        <h3 style="font-family:'Cinzel',serif; font-size:0.95rem; color:var(--accent); margin-bottom:12px;">Part 2 — What Does It Cost?</h3>
+        <p style="margin-bottom:8px;">Using this tool is not free, but it is extremely inexpensive — far less than any astrology software subscription.</p>
+        <ul style="margin-left:20px; line-height:2; margin-bottom:10px;">
+          <li>Each time you calculate sahamas for one chart, it costs roughly <strong>one cent or less</strong></li>
+          <li>Your initial $5.00 deposit will last most students <strong>years</strong> of regular use</li>
+          <li>There is no monthly fee and no subscription</li>
+          <li>You only spend money when you actually use the tool</li>
+        </ul>
+        <p style="font-size:0.88rem; color:#7a6a52; font-style:italic;">To put it in perspective: doing one chart per week for an entire year would cost approximately 50 cents.</p>
+      </div>
+
+      <div style="background:var(--paper); border:1px solid var(--light-rule); border-radius:4px; padding:18px 20px;">
+        <h3 style="font-family:'Cinzel',serif; font-size:0.95rem; color:var(--accent); margin-bottom:12px;">Part 3 — How to Use This Tool</h3>
+        <ol style="margin-left:20px; line-height:1.8; margin-bottom:0;">
+          <li style="margin-bottom:10px;"><strong>Paste your API key.</strong> When you open this tool in your browser, the first section you see is labeled <em>API Key</em>. Click inside the white box in that section and paste your key. You must do this every time you open the tool — it does not save your key between sessions. This is for your security.</li>
+          <li style="margin-bottom:10px;"><strong>Upload your Astronomical Data table.</strong> In Step 1, take a screenshot of the Astronomical Data table in Shri Jyoti Star (or Jagannatha Hora, Parashara Light, or similar). Click inside the Step 1 box and paste the screenshot directly using Command+V on a Mac or Ctrl+V on Windows. Or click <em>Choose File</em> to find the screenshot on your computer. The tool reads it automatically and extracts all planetary longitudes. After a few seconds the extracted values appear on screen — review them and correct any if needed.</li>
+          <li style="margin-bottom:10px;"><strong>Upload your House Cusps table.</strong> In Step 2, take a screenshot of the House Cusps (Chalit/Śhrī Pati) table. Click inside the Step 2 box and paste it the same way. The tool reads all 12 Bhāva Madhyas from the Centre column automatically.</li>
+          <li style="margin-bottom:10px;"><strong>Select D or N.</strong> In Step 3, select whether this is a Diurnal (D) or Nocturnal (N) chart.</li>
+          <li style="margin-bottom:10px;"><strong>Click Calculate.</strong> Press the <em>Calculate All 51 Sahamas</em> button. All 51 sahamas will appear instantly in a table showing the name, formula used, result in rāśi and degrees, and whether saikatham was applied.</li>
+          <li><strong>Print or save.</strong> Use the <em>Print / Save PDF</em> button to print the results or save them as a PDF file on your computer.</li>
+        </ol>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- API Key -->
+  <div class="section">
+    <h2>API Key</h2>
+    <p style="margin-bottom:12px; font-size:0.92rem; color:#5a4a32;">Paste your Anthropic API key in the box below. If you do not have one yet, see the <strong>Help &amp; Setup Instructions</strong> above — it explains exactly how to get one in a few simple steps.</p>
+    <div class="api-row">
+      <input type="password" id="api-key" placeholder="Paste your key here — it looks like: sk-ant-api03-xxxx..." />
+    </div>
+    <p class="api-note">Your key is used only to read the chart images. It is never stored by this tool or transmitted anywhere except directly to Anthropic's servers.</p>
+  </div>
+
+  <!-- Chart Upload -->
+  <div class="section">
+    <h2>Step 1 — Astronomical Data Table</h2>
+    <p style="font-size:0.9rem; color:#5a4a32; margin-bottom:12px;">Take a screenshot of the <strong>Astronomical Data</strong> table in Shri Jyoti Star. Then either <strong>paste it directly</strong> (Command+V on Mac, Ctrl+V on Windows) into the box below, or click <strong>Choose File</strong> to locate it on your computer.</p>
+    <div class="upload-area" id="upload-area" tabindex="0"
+      
+      <p>📋 Click here then paste your screenshot (Command+V / Ctrl+V)<br>— or —</p>
+      <button class="btn btn-small" id="choose-file-btn">Choose File</button>
+      <input type="file" id="file-input" accept="image/*">
+    </div>
+    <img id="preview-img" alt="Chart preview" style="max-width:100%;max-height:220px;border:1px solid var(--rule);border-radius:3px;margin-top:12px;display:none;">
+    <div id="extract-status" class="status"></div>
+    <div id="extracted-data" style="display:none; margin-top:16px;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+        <span style="font-family:'Cinzel',serif; font-size:0.85rem; color:var(--accent);">Extracted Longitudes — verify and correct if needed</span>
+        <button class="btn btn-small" id="re-extract-btn"><span id="re-extract-spinner" style="display:none" class="spinner"></span>Re-extract</button>
+      </div>
+      <div class="extracted-grid" id="extracted-grid"></div>
+    </div>
+  </div>
+
+  <!-- House Cusps Upload -->
+  <div class="section">
+    <h2>Step 2 — House Cusps Table (Chalit/Śhrī Pati)</h2>
+    <p style="font-size:0.9rem; color:#5a4a32; margin-bottom:12px;">Take a screenshot of the <strong>House Cusps (Chalit/Śhrī Pati)</strong> table in Shri Jyoti Star. Then either <strong>paste it directly</strong> (Command+V on Mac, Ctrl+V on Windows) into the box below, or click <strong>Choose File</strong> to locate it on your computer.</p>
+    <div class="upload-area" id="upload-area-bm" tabindex="0"
+      
+      <p>📋 Click here then paste your screenshot (Command+V / Ctrl+V)<br>— or —</p>
+      <button class="btn btn-small" id="choose-file-bm-btn">Choose File</button>
+      <input type="file" id="file-input-bm" accept="image/*">
+    </div>
+    <img id="preview-img-bm" alt="House cusps preview" style="max-width:100%;max-height:220px;border:1px solid var(--rule);border-radius:3px;margin-top:12px;display:none;">
+    <div id="bm-extract-status" class="status"></div>
+    <div id="bm-extracted-data" style="display:none; margin-top:16px;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+        <span style="font-family:'Cinzel',serif; font-size:0.85rem; color:var(--accent);">Extracted Bhāva Madhyas — verify and correct if needed</span>
+        <button class="btn btn-small" id="re-extract-bm-btn"><span id="re-extract-bm-spinner" style="display:none" class="spinner"></span>Re-extract</button>
+      </div>
+      <div class="extracted-grid" id="bm-extracted-grid"></div>
+    </div>
+  </div>
+
+  <!-- D/N -->
+  <div class="section">
+    <h2>Step 3 — Chart Type</h2>
+    <div class="dn-toggle">
+      <label>Chart type:</label>
+      <button class="toggle-btn active" id="btn-day">D — Diurnal (Sun above horizon)</button>
+      <button class="toggle-btn" id="btn-night">N — Nocturnal (Sun below horizon)</button>
+    </div>
+    <p style="font-size:0.85rem; color:#7a6a52; font-style:italic;">Diurnal = Sun above the horizon at the moment of the Varṣa-Praveśa. Nocturnal = Sun below the horizon.</p>
+  </div>
+
+  <!-- Calculate -->
+  <div class="section">
+    <h2>Step 4 — Calculate</h2>
+    <div class="calc-row">
+      <button class="btn" id="calc-btn" >
+        <span id="calc-spinner" style="display:none" class="spinner"></span>
+        Calculate All 51 Sahamas
+      </button>
+    </div>
+    <div id="calc-status" class="status"></div>
+  </div>
+
+  <!-- Results -->
+  <div id="results-section">
+    <div class="section">
+      <div class="results-header">
+        <h2 style="border:none; padding:0; margin:0;">Results — All 51 Sahamas</h2>
+        <div>
+          <button class="btn btn-small" id="print-btn">Print / Save PDF</button>
+        </div>
+      </div>
+      <div id="chart-info-bar" class="chart-info"></div>
+      <div class="results-table-wrap" style="margin-top:12px;">
+        <table class="results" id="results-table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Sahama</th>
+              <th>D/N</th>
+              <th>Formula Used</th>
+              <th>Result (Sidereal)</th>
+              <th>Saikatham</th>
+            </tr>
+          </thead>
+          <tbody id="results-body"></tbody>
+        </table>
+      </div>
+      <p class="print-note">Sidereal (Nirayana) zodiac · Lahiri Ayanāṃśa · Source: Tājika Nīlakaṇṭhī · © Hart deFouw</p>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// ─── State ────────────────────────────────────────────────────────────────────
+let chartData = {};   // graha longitudes keyed by abbreviation
+let dnMode = 'D';
+let imageBase64 = null;
+let imageMimeType = null;
+let imageBMBase64 = null;
+let imageBMMimeType = null;
+
+// ─── Rashi definitions ────────────────────────────────────────────────────────
+const RASHIS = [
+  'Aries','Taurus','Gemini','Cancer','Leo','Virgo',
+  'Libra','Scorpio','Sagittarius','Capricorn','Aquarius','Pisces'
+];
+const RASHI_SHORT = {
+  'Ar':'Aries','Ta':'Taurus','Ge':'Gemini','Cn':'Cancer','Ca':'Cancer',
+  'Le':'Leo','Vi':'Virgo','Li':'Libra','Sc':'Scorpio','Sa':'Sagittarius',
+  'Sg':'Sagittarius','Cp':'Capricorn','Ca':'Capricorn','Aq':'Aquarius','Pi':'Pisces',
+  'Sco':'Scorpio','Sag':'Sagittarius','Cap':'Capricorn','Aqu':'Aquarius','Pis':'Pisces',
+  'Ari':'Aries','Tau':'Taurus','Gem':'Gemini','Can':'Cancer',
+  'Leo':'Leo','Vir':'Virgo','Lib':'Libra','Vgo':'Virgo'
+};
+
+// Sign lords
+const SIGN_LORD = {
+  'Aries':'MA','Taurus':'VE','Gemini':'ME','Cancer':'MO','Leo':'SU','Virgo':'ME',
+  'Libra':'VE','Scorpio':'MA','Sagittarius':'JU','Capricorn':'SA','Aquarius':'SA','Pisces':'JU'
+};
+
+function rashiToBase(rashi) {
+  return RASHIS.indexOf(rashi) * 30;
+}
+
+function parseRashiDeg(str) {
+  // Accepts: "Scorpio 9°35'" or "219°35'34"" or "219.59" or "Sco 9 35"
+  if (!str) return null;
+  str = str.trim();
+
+  // Pure decimal
+  if (/^\d+(\.\d+)?$/.test(str)) {
+    const v = parseFloat(str);
+    return v >= 0 && v < 360 ? v : null;
+  }
+
+  // Absolute degrees like "219°35'34"" or "219°35'"
+  const absMatch = str.match(/^(\d+)[°\s]+(\d+)['\s]*(\d+)?["']?\s*$/);
+  if (absMatch && parseInt(absMatch[1]) >= 30) {
+    const deg = parseInt(absMatch[1]);
+    const min = parseInt(absMatch[2]);
+    const sec = parseInt(absMatch[3] || 0);
+    const v = deg + min/60 + sec/3600;
+    return v < 360 ? v : null;
+  }
+
+  // Rashi + degrees: "Scorpio 9°35'" or "Sco 9 35"
+  let rashi = null, deg = 0, min = 0;
+
+  // Try full rashi name first
+  for (const r of RASHIS) {
+    if (str.toLowerCase().startsWith(r.toLowerCase())) {
+      rashi = r;
+      str = str.slice(r.length).trim();
+      break;
+    }
+  }
+  // Try 3-letter abbreviation
+  if (!rashi) {
+    const abbr = str.slice(0,3);
+    if (RASHI_SHORT[abbr]) {
+      rashi = RASHI_SHORT[abbr];
+      str = str.slice(3).trim();
+    }
+  }
+
+  if (rashi) {
+    const m = str.match(/(\d+)[°\s]+(\d+)|(\d+\.?\d*)/);
+    if (m) {
+      if (m[3]) { deg = parseFloat(m[3]); }
+      else { deg = parseInt(m[1]); min = parseInt(m[2]); }
+    }
+    return rashiToBase(rashi) + deg + min/60;
+  }
+
+  return null;
+}
+
+function longToRashi(deg) {
+  deg = ((deg % 360) + 360) % 360;
+  const idx = Math.floor(deg / 30);
+  const d = deg - idx * 30;
+  const dInt = Math.floor(d);
+  const mInt = Math.round((d - dInt) * 60);
+  return `${RASHIS[idx]} ${dInt}°${String(mInt).padStart(2,'0')}′`;
+}
+
+function normDeg(d) {
+  return ((d % 360) + 360) % 360;
+}
+
+// ─── Saikatham check ──────────────────────────────────────────────────────────
+// Returns true if L3 does NOT fall on the arc from L2 forward to L1
+function needsSaikatham(L1, L2, L3) {
+  L1 = normDeg(L1); L2 = normDeg(L2); L3 = normDeg(L3);
+  // Arc length from L2 to L1 going forward
+  const arcLen = normDeg(L1 - L2);
+  // Distance from L2 to L3 going forward
+  const distL3 = normDeg(L3 - L2);
+  // L3 is on arc if distL3 <= arcLen (inclusive of endpoints)
+  return distL3 > arcLen;
+}
+
+function calcSahama(L1, L2, L3) {
+  const raw = normDeg((L1 - L2 + L3 + 720));
+  const saikatham = needsSaikatham(L1, L2, L3);
+  const result = saikatham ? normDeg(raw + 30) : raw;
+  return { result, saikatham };
+}
+
+// ─── Sahama definitions ───────────────────────────────────────────────────────
+// Each entry: [#, name, signification, formulaFn, formulaStr_D, formulaStr_N, hasDN]
+// formulaFn receives (g, punya, guru, jnatam, dn) where g=graha longitudes object
+// Returns {result, saikatham} or null if data missing
+
+function getSahamas(g, dn) {
+  const results = [];
+
+  function safe(fn, name) {
+    try { return fn(); }
+    catch(e) { console.warn('Error in', name, e); return null; }
+  }
+
+  // Helper: get longitude, return null if missing
+  function L(key) {
+    const v = g[key];
+    if (v === null || v === undefined || isNaN(v)) throw new Error('Missing: ' + key);
+    return v;
+  }
+
+  // #1 Punya — must calculate first
+  let punya = null, guru = null, jnatam = null;
+
+  const p1 = safe(() => {
+    if (dn === 'D') return calcSahama(L('MO'), L('SU'), L('LG'));
+    else            return calcSahama(L('SU'), L('MO'), L('LG'));
+  }, 'Punya');
+  punya = p1 ? p1.result : null;
+
+  results.push({ num:1, name:'Puṇya', sig:'Virtue, prosperity',
+    formula: dn==='D' ? '(MO−SU)+LG' : '(SU−MO)+LG', data: p1 });
+
+  // #2 Guru
+  const p2 = safe(() => {
+    if (dn === 'D') return calcSahama(L('SU'), L('MO'), L('LG'));
+    else            return calcSahama(L('MO'), L('SU'), L('LG'));
+  }, 'Guru');
+  guru = p2 ? p2.result : null;
+  results.push({ num:2, name:'Guru', sig:'Teacher, mentor',
+    formula: dn==='D' ? '(SU−MO)+LG' : '(MO−SU)+LG', data: p2 });
+
+  // #3 Jnatam (Vidya) — same as Guru
+  const p3 = safe(() => {
+    if (dn === 'D') return calcSahama(L('SU'), L('MO'), L('LG'));
+    else            return calcSahama(L('MO'), L('SU'), L('LG'));
+  }, 'Jnatam');
+  jnatam = p3 ? p3.result : null;
+  results.push({ num:3, name:'Jñātam (Vidyā)', sig:'Knowledge, expertise',
+    formula: dn==='D' ? '(SU−MO)+LG' : '(MO−SU)+LG', data: p3 });
+
+  // #4 Yaśa
+  results.push({ num:4, name:'Yaśa', sig:'Fame, reputation',
+    formula: dn==='D' ? '(JU−Puṇya)+LG' : '(Puṇya−JU)+LG',
+    data: safe(() => {
+      if (punya===null) throw new Error('Missing Punya');
+      if (dn==='D') return calcSahama(L('JU'), punya, L('LG'));
+      else          return calcSahama(punya, L('JU'), L('LG'));
+    }, 'Yasa') });
+
+  // #5 Mitram
+  results.push({ num:5, name:'Mitram', sig:'Friend, companion',
+    formula: dn==='D' ? '(JU−Puṇya)+VE' : '(Puṇya−JU)+VE',
+    data: safe(() => {
+      if (punya===null) throw new Error('Missing Punya');
+      if (dn==='D') return calcSahama(L('JU'), punya, L('VE'));
+      else          return calcSahama(punya, L('JU'), L('VE'));
+    }, 'Mitram') });
+
+  // #6 Mahatmya
+  results.push({ num:6, name:'Mahātmya', sig:'Magnanimity, nobleness',
+    formula: dn==='D' ? '(Puṇya−MA)+LG' : '(MA−Puṇya)+LG',
+    data: safe(() => {
+      if (punya===null) throw new Error('Missing Punya');
+      if (dn==='D') return calcSahama(punya, L('MA'), L('LG'));
+      else          return calcSahama(L('MA'), punya, L('LG'));
+    }, 'Mahatmya') });
+
+  // #7 Asa
+  results.push({ num:7, name:'Āśā', sig:'Hope, prospects',
+    formula: dn==='D' ? '(SA−VE)+LG' : '(VE−SA)+LG',
+    data: safe(() => {
+      if (dn==='D') return calcSahama(L('SA'), L('VE'), L('LG'));
+      else          return calcSahama(L('VE'), L('SA'), L('LG'));
+    }, 'Asa') });
+
+  // #8 Samarthata
+  results.push({ num:8, name:'Samarthatā', sig:'Force, strength, ability',
+    formula: dn==='D' ? '(MA−LP)+LG' : '(LP−MA)+LG',
+    data: safe(() => {
+      if (dn==='D') return calcSahama(L('MA'), L('LP'), L('LG'));
+      else          return calcSahama(L('LP'), L('MA'), L('LG'));
+    }, 'Samarthata') });
+
+  // #9 Bhrata — D or N same
+  results.push({ num:9, name:'Bhrātā', sig:'Brother, male kindred',
+    formula: '(JU−SA)+LG',
+    data: safe(() => calcSahama(L('JU'), L('SA'), L('LG')), 'Bhrata') });
+
+  // #10 Gauravam
+  results.push({ num:10, name:'Gauravam', sig:'Respect, regard, stature',
+    formula: dn==='D' ? '(JU−MO)+SU' : '(MO−SU)+JU',
+    data: safe(() => {
+      if (dn==='D') return calcSahama(L('JU'), L('MO'), L('SU'));
+      else          return calcSahama(L('MO'), L('SU'), L('JU'));
+    }, 'Gauravam') });
+
+  // #11 Rajyam
+  results.push({ num:11, name:'Rājyam', sig:'Authority, country, king',
+    formula: dn==='D' ? '(SA−SU)+LG' : '(SU−SA)+LG',
+    data: safe(() => {
+      if (dn==='D') return calcSahama(L('SA'), L('SU'), L('LG'));
+      else          return calcSahama(L('SU'), L('SA'), L('LG'));
+    }, 'Rajyam') });
+
+  // #12 Tata — same as Rajyam D, N note
+  results.push({ num:12, name:'Tātā (Pitā)', sig:'Father, paternal relative',
+    formula: dn==='D' ? '(SA−SU)+LG' : '(SU−SA)+LG',
+    data: safe(() => {
+      if (dn==='D') return calcSahama(L('SA'), L('SU'), L('LG'));
+      else          return calcSahama(L('SU'), L('SA'), L('LG'));
+    }, 'Tata') });
+
+  // #13 Mata
+  results.push({ num:13, name:'Mātā', sig:'Mother, maternal relative',
+    formula: dn==='D' ? '(MO−VE)+LG' : '(VE−MO)+LG',
+    data: safe(() => {
+      if (dn==='D') return calcSahama(L('MO'), L('VE'), L('LG'));
+      else          return calcSahama(L('VE'), L('MO'), L('LG'));
+    }, 'Mata') });
+
+  // #14 Suta — D or N same
+  results.push({ num:14, name:'Suta (Putra)', sig:'Son, protected boys',
+    formula: '(JU−MO)+LG',
+    data: safe(() => calcSahama(L('JU'), L('MO'), L('LG')), 'Suta') });
+
+  // #15 Jivita
+  results.push({ num:15, name:'Jīvita', sig:'Alive, living, livelihood',
+    formula: dn==='D' ? '(SA−JU)+LG' : '(JU−SA)+LG',
+    data: safe(() => {
+      if (dn==='D') return calcSahama(L('SA'), L('JU'), L('LG'));
+      else          return calcSahama(L('JU'), L('SA'), L('LG'));
+    }, 'Jivita') });
+
+  // #16 Ambu — same as Mata
+  results.push({ num:16, name:'Ambu', sig:'Water, liquid, fluids',
+    formula: dn==='D' ? '(MO−VE)+LG' : '(VE−MO)+LG',
+    data: safe(() => {
+      if (dn==='D') return calcSahama(L('MO'), L('VE'), L('LG'));
+      else          return calcSahama(L('VE'), L('MO'), L('LG'));
+    }, 'Ambu') });
+
+  // #17 Karma
+  results.push({ num:17, name:'Karma', sig:'Work, deeds, activities',
+    formula: dn==='D' ? '(MA−ME)+LG' : '(ME−MA)+LG',
+    data: safe(() => {
+      if (dn==='D') return calcSahama(L('MA'), L('ME'), L('LG'));
+      else          return calcSahama(L('ME'), L('MA'), L('LG'));
+    }, 'Karma') });
+
+  // #18 Mandyam (Roga) — D or N same
+  results.push({ num:18, name:'Māndyam (Roga)', sig:'Illness, disease',
+    formula: '(LG−MO)+LG',
+    data: safe(() => calcSahama(L('LG'), L('MO'), L('LG')), 'Mandyam') });
+
+  // #19 Manmatha
+  results.push({ num:19, name:'Manmatha', sig:'Love, infatuation, passion',
+    formula: dn==='D' ? '(MO−LP)+LG' : '(LP−MO)+LG',
+    data: safe(() => {
+      if (dn==='D') return calcSahama(L('MO'), L('LP'), L('LG'));
+      else          return calcSahama(L('LP'), L('MO'), L('LG'));
+    }, 'Manmatha') });
+
+  // #20 Kali
+  results.push({ num:20, name:'Kali', sig:'Strife, contention, quarrels',
+    formula: dn==='D' ? '(JU−MA)+LG' : '(MA−JU)+LG',
+    data: safe(() => {
+      if (dn==='D') return calcSahama(L('JU'), L('MA'), L('LG'));
+      else          return calcSahama(L('MA'), L('JU'), L('LG'));
+    }, 'Kali') });
+
+  // #21 Ksama — same as Kali
+  results.push({ num:21, name:'Kṣamā', sig:'Forbearance, patience',
+    formula: dn==='D' ? '(JU−MA)+LG' : '(MA−JU)+LG',
+    data: safe(() => {
+      if (dn==='D') return calcSahama(L('JU'), L('MA'), L('LG'));
+      else          return calcSahama(L('MA'), L('JU'), L('LG'));
+    }, 'Ksama') });
+
+  // #22 Sastra
+  results.push({ num:22, name:'Śāstra', sig:'Wisdom, lore, precepts',
+    formula: dn==='D' ? '(JU−SA)+ME' : '(SA−JU)+ME',
+    data: safe(() => {
+      if (dn==='D') return calcSahama(L('JU'), L('SA'), L('ME'));
+      else          return calcSahama(L('SA'), L('JU'), L('ME'));
+    }, 'Sastra') });
+
+  // #23 Bandhu — D or N same
+  results.push({ num:23, name:'Bandhu', sig:'Relative, family, kindred',
+    formula: '(ME−MO)+LG',
+    data: safe(() => calcSahama(L('ME'), L('MO'), L('LG')), 'Bandhu') });
+
+  // #24 Bandhaka — same as Bandhu
+  results.push({ num:24, name:'Bandhaka', sig:'Violation, confining',
+    formula: '(ME−MO)+LG',
+    data: safe(() => calcSahama(L('ME'), L('MO'), L('LG')), 'Bandhaka') });
+
+  // #25 Mrtyu — D or N same
+  results.push({ num:25, name:'Mṛtyu', sig:'Death, mortality',
+    formula: '(BM8−MO)+LG',
+    data: safe(() => calcSahama(L('BM8'), L('MO'), L('LG')), 'Mrtyu') });
+
+  // #26 Parades'a — D or N same
+  results.push({ num:26, name:'Paradeśa (Deśāntara)', sig:'Foreign countries',
+    formula: '(BM9−BP9)+LG',
+    data: safe(() => calcSahama(L('BM9'), L('BP9'), L('LG')), 'Paradesa') });
+
+  // #27 Dhana — D or N same
+  results.push({ num:27, name:'Dhana (Artha)', sig:'Wealth, money, income',
+    formula: '(BM2−BP2)+LG',
+    data: safe(() => calcSahama(L('BM2'), L('BP2'), L('LG')), 'Dhana') });
+
+  // #28 Anya Dara — D or N same
+  results.push({ num:28, name:'Anya Dārā (Para Dhara)', sig:'Paramours, adultery',
+    formula: '(VE−SU)+LG',
+    data: safe(() => calcSahama(L('VE'), L('SU'), L('LG')), 'AnyaDara') });
+
+  // #29 Anya Karma
+  results.push({ num:29, name:'Anya Karma', sig:'Other acts, hobbies, sidelines',
+    formula: dn==='D' ? '(MO−SA)+LG' : '(SA−MO)+LG',
+    data: safe(() => {
+      if (dn==='D') return calcSahama(L('MO'), L('SA'), L('LG'));
+      else          return calcSahama(L('SA'), L('MO'), L('LG'));
+    }, 'AnyaKarma') });
+
+  // #30 Vanik — D or N same
+  results.push({ num:30, name:'Vaṇik', sig:'Trade, masonry, wood, lumber',
+    formula: '(MO−ME)+LG',
+    data: safe(() => calcSahama(L('MO'), L('ME'), L('LG')), 'Vanik') });
+
+  // #31 Karyasiddhi
+  results.push({ num:31, name:'Kāryasiddhi', sig:'Expertise, success in a project',
+    formula: dn==='D' ? '(SA−SU)+SU disp.' : '(SA−MO)+MO disp.',
+    data: safe(() => {
+      if (dn==='D') return calcSahama(L('SA'), L('SU'), L('SU_DISP'));
+      else          return calcSahama(L('SA'), L('MO'), L('MO_DISP'));
+    }, 'Karyasiddhi') });
+
+  // #32 Udvaha — D or N same
+  results.push({ num:32, name:'Udvāha (Vivāha)', sig:'Marriage, matrimony',
+    formula: '(VE−SA)+LG',
+    data: safe(() => calcSahama(L('VE'), L('SA'), L('LG')), 'Udvaha') });
+
+  // #33 Suti
+  results.push({ num:33, name:'Sūti', sig:'Birth, pregnancy, reproduction',
+    formula: dn==='D' ? '(JU−ME)+LG' : '(ME−JU)+LG',
+    data: safe(() => {
+      if (dn==='D') return calcSahama(L('JU'), L('ME'), L('LG'));
+      else          return calcSahama(L('ME'), L('JU'), L('LG'));
+    }, 'Suti') });
+
+  // #34 Santapa — D or N same
+  results.push({ num:34, name:'Santāpa', sig:'Heat, stress, sorrow',
+    formula: '(SA−MO)+BM6',
+    data: safe(() => calcSahama(L('SA'), L('MO'), L('BM6')), 'Santapa') });
+
+  // #35 S'raddha — D or N same
+  results.push({ num:35, name:'Śraddhā', sig:'Faith, belief, trust',
+    formula: '(VE−MA)+LG',
+    data: safe(() => calcSahama(L('VE'), L('MA'), L('LG')), 'Sraddha') });
+
+  // #36 Priti — D or N same
+  results.push({ num:36, name:'Prīti', sig:'Delight, joy, pleasure, love',
+    formula: '(Jñātam−Puṇya)+LG',
+    data: safe(() => {
+      if (jnatam===null || punya===null) throw new Error('Missing Jnatam/Punya');
+      return calcSahama(jnatam, punya, L('LG'));
+    }, 'Priti') });
+
+  // #37 Bala — same as Yasa
+  results.push({ num:37, name:'Bala', sig:'Power, vigor, strength',
+    formula: dn==='D' ? '(JU−Puṇya)+LG' : '(Puṇya−JU)+LG',
+    data: safe(() => {
+      if (punya===null) throw new Error('Missing Punya');
+      if (dn==='D') return calcSahama(L('JU'), punya, L('LG'));
+      else          return calcSahama(punya, L('JU'), L('LG'));
+    }, 'Bala') });
+
+  // #38 Tanu — same as Yasa
+  results.push({ num:38, name:'Tanu', sig:'Body, corporality',
+    formula: dn==='D' ? '(JU−Puṇya)+LG' : '(Puṇya−JU)+LG',
+    data: safe(() => {
+      if (punya===null) throw new Error('Missing Punya');
+      if (dn==='D') return calcSahama(L('JU'), punya, L('LG'));
+      else          return calcSahama(punya, L('JU'), L('LG'));
+    }, 'Tanu') });
+
+  // #39 Jadyam
+  results.push({ num:39, name:'Jāḍyam', sig:'Apathy, dullness, stupidity',
+    formula: dn==='D' ? '(MA−SA)+ME' : '(SA−MA)+ME',
+    data: safe(() => {
+      if (dn==='D') return calcSahama(L('MA'), L('SA'), L('ME'));
+      else          return calcSahama(L('SA'), L('MA'), L('ME'));
+    }, 'Jadyam') });
+
+  // #40 Vyapara — D or N same
+  results.push({ num:40, name:'Vyāpāra', sig:'Business, employment, trade',
+    formula: '(MA−ME)+LG',
+    data: safe(() => calcSahama(L('MA'), L('ME'), L('LG')), 'Vyapara') });
+
+  // #41 Paniyapathana
+  results.push({ num:41, name:'Pānīyapathana', sig:'Danger from water and liquids',
+    formula: dn==='D' ? '(SA−MO)+LG' : '(MO−SA)+LG',
+    data: safe(() => {
+      if (dn==='D') return calcSahama(L('SA'), L('MO'), L('LG'));
+      else          return calcSahama(L('MO'), L('SA'), L('LG'));
+    }, 'Paniyapathana') });
+
+  // #42 Ripu
+  results.push({ num:42, name:'Ripu (Śatru)', sig:'Foe, enemy, opponent',
+    formula: dn==='D' ? '(MA−SA)+LG' : '(SA−MA)+LG',
+    data: safe(() => {
+      if (dn==='D') return calcSahama(L('MA'), L('SA'), L('LG'));
+      else          return calcSahama(L('SA'), L('MA'), L('LG'));
+    }, 'Ripu') });
+
+  // #43 Saurya — same as Mahatmya
+  results.push({ num:43, name:'Saurya', sig:'Valor, prowess, heroism',
+    formula: dn==='D' ? '(Puṇya−MA)+LG' : '(MA−Puṇya)+LG',
+    data: safe(() => {
+      if (punya===null) throw new Error('Missing Punya');
+      if (dn==='D') return calcSahama(punya, L('MA'), L('LG'));
+      else          return calcSahama(L('MA'), punya, L('LG'));
+    }, 'Saurya') });
+
+  // #44 Upaya — same as Jivita
+  results.push({ num:44, name:'Upāya', sig:'Remedy, solution, means',
+    formula: dn==='D' ? '(SA−JU)+LG' : '(JU−SA)+LG',
+    data: safe(() => {
+      if (dn==='D') return calcSahama(L('SA'), L('JU'), L('LG'));
+      else          return calcSahama(L('JU'), L('SA'), L('LG'));
+    }, 'Upaya') });
+
+  // #45 Daridratva — verified: D=(Punya-ME)+ME, N=(MA-JU)+LG
+  results.push({ num:45, name:'Dāridratva', sig:'Poverty, indigence',
+    formula: dn==='D' ? '(Puṇya−ME)+ME' : '(MA−JU)+LG',
+    data: safe(() => {
+      if (dn==='D') {
+        if (punya===null) throw new Error('Missing Punya');
+        return calcSahama(punya, L('ME'), L('ME'));
+      } else {
+        return calcSahama(L('MA'), L('JU'), L('LG'));
+      }
+    }, 'Daridratva') });
+
+  // #46 Guruta — fixed point 10° Aries = 10°
+  results.push({ num:46, name:'Guruta', sig:'Greatness, importance',
+    formula: dn==='D' ? '(10°Aries−SU)+LG' : '(SU−10°Aries)+LG',
+    data: safe(() => {
+      const ariesTen = 10.0;
+      if (dn==='D') return calcSahama(ariesTen, L('SU'), L('LG'));
+      else          return calcSahama(L('SU'), ariesTen, L('LG'));
+    }, 'Guruta') });
+
+  // #47 Ambupatha — fixed point 15° Cancer = 105°
+  results.push({ num:47, name:'Ambupatha (Jalapatha)', sig:'Aquatic voyages, aquatic plants',
+    formula: dn==='D' ? '(15°Cancer−SA)+LG' : '(SA−15°Cancer)+LG',
+    data: safe(() => {
+      const cancerFifteen = 105.0;
+      if (dn==='D') return calcSahama(cancerFifteen, L('SA'), L('LG'));
+      else          return calcSahama(L('SA'), cancerFifteen, L('LG'));
+    }, 'Ambupatha') });
+
+  // #48 Bandhana
+  results.push({ num:48, name:'Bandhana', sig:'Binding, stopping, imprisoning',
+    formula: dn==='D' ? '(Puṇya−SA)+LG' : '(SA−Puṇya)+LG',
+    data: safe(() => {
+      if (punya===null) throw new Error('Missing Punya');
+      if (dn==='D') return calcSahama(punya, L('SA'), L('LG'));
+      else          return calcSahama(L('SA'), punya, L('LG'));
+    }, 'Bandhana') });
+
+  // #49 Duhita — same as Suta
+  results.push({ num:49, name:'Duhitā', sig:'Daughter, young girls',
+    formula: '(JU−MO)+LG',
+    data: safe(() => calcSahama(L('JU'), L('MO'), L('LG')), 'Duhita') });
+
+  // #50 Asva
+  results.push({ num:50, name:'Aśva', sig:'Horses, mares, stallions',
+    formula: dn==='D' ? '(Puṇya−SU)+BM11' : '(SU−Puṇya)+BM11',
+    data: safe(() => {
+      if (punya===null) throw new Error('Missing Punya');
+      if (dn==='D') return calcSahama(punya, L('SU'), L('BM11'));
+      else          return calcSahama(L('SU'), punya, L('BM11'));
+    }, 'Asva') });
+
+  // #51 Labha — D or N same
+  results.push({ num:51, name:'Lābha', sig:'Gain, acquisition, achievement',
+    formula: '(BM11−BP11)+LG',
+    data: safe(() => calcSahama(L('BM11'), L('BP11'), L('LG')), 'Labha') });
+
+  return results;
+}
+
+// ─── Help toggle ──────────────────────────────────────────────────────────────
+function toggleHelp() {
+  const content = document.getElementById('help-content');
+  const label = document.getElementById('help-toggle-label');
+  const visible = content.style.display !== 'none';
+  content.style.display = visible ? 'none' : 'block';
+  label.textContent = visible ? '(click to expand)' : '(click to collapse)';
+}
+
+// ─── D/N toggle ───────────────────────────────────────────────────────────────
+function setDN(v) {
+  dnMode = v;
+  document.getElementById('btn-day').classList.toggle('active', v==='D');
+  document.getElementById('btn-night').classList.toggle('active', v==='N');
+}
+
+// ─── Paste / Drop / File input handlers ──────────────────────────────────────
+function handlePaste(event, type) {
+  const items = (event.clipboardData || event.originalEvent.clipboardData).items;
+  for (const item of items) {
+    if (item.type.startsWith('image/')) {
+      const file = item.getAsFile();
+      if (file) processImageFile(file, type);
+      event.preventDefault();
+      return;
+    }
+  }
+}
+
+function handleDrop(event, type) {
+  const file = event.dataTransfer.files[0];
+  if (file && file.type.startsWith('image/')) processImageFile(file, type);
+}
+
+function handleFileInput(event, type) {
+  const file = event.target.files[0];
+  if (file) processImageFile(file, type);
+}
+
+function processImageFile(file, type) {
+  const reader = new FileReader();
+  reader.onload = e => {
+    const dataUrl = e.target.result;
+    const b64 = dataUrl.split(',')[1];
+    const mime = file.type || 'image/png';
+    if (type === 'astro') {
+      imageBase64 = b64; imageMimeType = mime;
+      document.getElementById('preview-img').src = dataUrl;
+      document.getElementById('preview-img').style.display = 'block';
+      extractFromImage();
+    } else {
+      imageBMBase64 = b64; imageBMMimeType = mime;
+      document.getElementById('preview-img-bm').src = dataUrl;
+      document.getElementById('preview-img-bm').style.display = 'block';
+      extractBMFromImage();
+    }
+  };
+  reader.readAsDataURL(file);
+}
+
+// ─── File upload — Astronomical Data (legacy handlers kept for compatibility) ─
+const uploadArea = document.getElementById('upload-area');
+const fileInput = document.getElementById('file-input');
+const previewImg = document.getElementById('preview-img');
+
+uploadArea.addEventListener('dragover', e => { e.preventDefault(); uploadArea.classList.add('dragover'); });
+uploadArea.addEventListener('dragleave', () => uploadArea.classList.remove('dragover'));
+uploadArea.addEventListener('drop', e => {
+  e.preventDefault(); uploadArea.classList.remove('dragover');
+  if (e.dataTransfer.files[0]) handleFile(e.dataTransfer.files[0]);
+});
+fileInput.addEventListener('change', () => { if (fileInput.files[0]) handleFile(fileInput.files[0]); });
+
+function handleFile(file) {
+  const reader = new FileReader();
+  reader.onload = e => {
+    const dataUrl = e.target.result;
+    imageBase64 = dataUrl.split(',')[1];
+    imageMimeType = file.type || 'image/png';
+    previewImg.src = dataUrl;
+    previewImg.style.display = 'block';
+    extractFromImage();
+  };
+  reader.readAsDataURL(file);
+}
+
+// ─── File upload — House Cusps ────────────────────────────────────────────────
+const uploadAreaBM = document.getElementById('upload-area-bm');
+const fileInputBM = document.getElementById('file-input-bm');
+const previewImgBM = document.getElementById('preview-img-bm');
+
+uploadAreaBM.addEventListener('dragover', e => { e.preventDefault(); uploadAreaBM.classList.add('dragover'); });
+uploadAreaBM.addEventListener('dragleave', () => uploadAreaBM.classList.remove('dragover'));
+uploadAreaBM.addEventListener('drop', e => {
+  e.preventDefault(); uploadAreaBM.classList.remove('dragover');
+  if (e.dataTransfer.files[0]) handleFileBM(e.dataTransfer.files[0]);
+});
+fileInputBM.addEventListener('change', () => { if (fileInputBM.files[0]) handleFileBM(fileInputBM.files[0]); });
+
+function handleFileBM(file) {
+  const reader = new FileReader();
+  reader.onload = e => {
+    const dataUrl = e.target.result;
+    imageBMBase64 = dataUrl.split(',')[1];
+    imageBMMimeType = file.type || 'image/png';
+    previewImgBM.src = dataUrl;
+    previewImgBM.style.display = 'block';
+    extractBMFromImage();
+  };
+  reader.readAsDataURL(file);
+}
+
+// ─── Extract grahas via Anthropic API ────────────────────────────────────────
+async function extractFromImage() {
+  const apiKey = document.getElementById('api-key').value.trim();
+  if (!apiKey) { showStatus('extract-status', 'error', 'Please enter your Anthropic API key above.'); return; }
+  if (!imageBase64) { showStatus('extract-status', 'error', 'Please upload a chart image first.'); return; }
+
+  showStatus('extract-status', 'info', '<span class="spinner"></span> Reading chart image — extracting planetary longitudes...');
+  document.getElementById('re-extract-spinner').style.display = 'inline-block';
+
+  const prompt = `This is an astronomical data table from Vedic astrology software (Jagannatha Hora, Parashara Light, or similar).
+Please extract the following from the image and return ONLY a JSON object, no explanation, no markdown:
+
+{
+  "LG": "absolute longitude e.g. 219°35'34\"",
+  "SU": "...", "MO": "...", "MA": "...", "ME": "...",
+  "JU": "...", "VE": "...", "SA": "...", "RA": "..."
+}
+
+Extract the Longitude column values exactly as shown. The Ascendant row gives LG.
+SU=Sun, MO=Moon, MA=Mars, ME=Mercury, JU=Jupiter, VE=Venus, SA=Saturn, RA=Rahu.
+If Ketu is shown instead of Rahu, compute Rahu as Ketu longitude + 180°.
+Return ONLY the JSON object.`;
+
+  try {
+    showStatus('extract-status', 'info', '<span class="spinner"></span> Connecting to Anthropic API...');
+    const response = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': apiKey,
+        'anthropic-version': '2023-06-01',
+        'anthropic-dangerous-direct-browser-access': 'true'
+      },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-5',
+        max_tokens: 1000,
+        messages: [{ role: 'user', content: [
+          { type: 'image', source: { type: 'base64', media_type: imageMimeType, data: imageBase64 } },
+          { type: 'text', text: prompt }
+        ]}]
+      })
+    });
+
+    showStatus('extract-status', 'info', '<span class="spinner"></span> Response received — parsing data...');
+
+    if (!response.ok) {
+      const err = await response.json();
+      throw new Error('API error ' + response.status + ': ' + (err.error?.message || JSON.stringify(err)));
+    }
+
+    const data = await response.json();
+    const text = data.content.map(b => b.text || '').join('');
+    
+    let parsed;
+    try {
+      parsed = JSON.parse(text.replace(/```json|```/g, '').trim());
+    } catch(parseErr) {
+      throw new Error('Could not parse response. Raw response: ' + text.substring(0, 200));
+    }
+
+    let extracted = 0;
+    for (const key of ['LG','SU','MO','MA','ME','JU','VE','SA','RA']) {
+      if (parsed[key]) { 
+        const lon = parseRashiDeg(parsed[key]); 
+        if (lon !== null) { chartData[key] = lon; extracted++; }
+      }
+    }
+
+    if (extracted === 0) throw new Error('No longitudes could be extracted from the image. Raw response: ' + text.substring(0, 200));
+
+    derivedValues();
+    renderExtractedFields();
+    showStatus('extract-status', 'success', '✓ Planetary longitudes extracted (' + extracted + ' values). Verify and correct if needed.');
+  } catch(e) { 
+    showStatus('extract-status', 'error', '❌ Error: ' + e.message); 
+  }
+  document.getElementById('re-extract-spinner').style.display = 'none';
+}
+
+// ─── Extract BMs via Anthropic API ───────────────────────────────────────────
+async function extractBMFromImage() {
+  const apiKey = document.getElementById('api-key').value.trim();
+  if (!apiKey) { showStatus('bm-extract-status', 'error', 'Please enter your Anthropic API key above.'); return; }
+  if (!imageBMBase64) { showStatus('bm-extract-status', 'error', 'Please upload the house cusps image first.'); return; }
+
+  showStatus('bm-extract-status', 'info', '<span class="spinner"></span> Reading house cusps — extracting all 12 Bhāva Madhyas from the Centre column...');
+  document.getElementById('re-extract-bm-spinner').style.display = 'inline-block';
+
+  const prompt = `This is a House Cusps (Chalit/Shri Pati) table from Vedic astrology software.
+The table has columns: Hs (house number), Centre (the Bhava Madhya), Nav, Nk, Start.
+Extract the Centre column values for all 12 houses and return ONLY this JSON object, no explanation, no markdown:
+
+{
+  "BM1":  "rashi and degrees e.g. Scorpio 9°35'",
+  "BM2":  "...", "BM3":  "...", "BM4":  "...",
+  "BM5":  "...", "BM6":  "...", "BM7":  "...",
+  "BM8":  "...", "BM9":  "...", "BM10": "...",
+  "BM11": "...", "BM12": "..."
+}
+
+The Centre column shows the rashi (sign) and degrees of each bhava madhya (house cusp midpoint).
+Return ONLY the JSON object.`;
+
+  try {
+    const response = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': apiKey,
+        'anthropic-version': '2023-06-01',
+        'anthropic-dangerous-direct-browser-access': 'true'
+      },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-5',
+        max_tokens: 1000,
+        messages: [{ role: 'user', content: [
+          { type: 'image', source: { type: 'base64', media_type: imageBMMimeType, data: imageBMBase64 } },
+          { type: 'text', text: prompt }
+        ]}]
+      })
+    });
+    if (!response.ok) { const err = await response.json(); throw new Error(err.error?.message || 'API error ' + response.status); }
+    const data = await response.json();
+    const text = data.content.map(b => b.text || '').join('');
+    const parsed = JSON.parse(text.replace(/```json|```/g, '').trim());
+
+    for (const key of ['BM1','BM2','BM3','BM4','BM5','BM6','BM7','BM8','BM9','BM10','BM11','BM12']) {
+      if (parsed[key]) { const lon = parseRashiDeg(parsed[key]); if (lon !== null) chartData[key] = lon; }
+    }
+    // Derive BP values from extracted BMs
+    deriveBPValues();
+    renderBMExtractedFields();
+    showStatus('bm-extract-status', 'success', '✓ All 12 Bhāva Madhyas extracted. Verify and correct if needed.');
+  } catch(e) { showStatus('bm-extract-status', 'error', 'Error: ' + e.message); }
+  document.getElementById('re-extract-bm-spinner').style.display = 'none';
+}
+
+function deriveBPValues() {
+  for (const [bmKey, bpKey] of [['BM2','BP2'],['BM9','BP9'],['BM11','BP11']]) {
+    const bm = chartData[bmKey];
+    if (bm !== undefined) {
+      const rashi = RASHIS[Math.floor(normDeg(bm) / 30)];
+      const lord = SIGN_LORD[rashi];
+      chartData[bpKey] = chartData[lord];
+    }
+  }
+}
+
+function renderBMExtractedFields() {
+  const grid = document.getElementById('bm-extracted-grid');
+  grid.innerHTML = '';
+  const bmLabels = ['1st','2nd','3rd','4th','5th','6th','7th','8th','9th','10th','11th','12th'];
+  for (let i = 1; i <= 12; i++) {
+    const key = 'BM' + i;
+    const val = chartData[key];
+    const displayVal = val !== undefined ? longToRashi(val) : '';
+    const div = document.createElement('div');
+    div.className = 'extracted-item';
+    div.innerHTML = `<label>BM${i} — ${bmLabels[i-1]} Bhāva</label><input type="text" id="field-${key}" value="${displayVal}" oninput="updateBMField('${key}', this.value)">`;
+    grid.appendChild(div);
+  }
+  document.getElementById('bm-extracted-data').style.display = 'block';
+}
+
+function updateBMField(key, val) {
+  const lon = parseRashiDeg(val);
+  if (lon !== null) { chartData[key] = lon; deriveBPValues(); }
+}
+
+function derivedValues() {
+  if (chartData.LG !== undefined) {
+    const lgRashi = RASHIS[Math.floor(normDeg(chartData.LG) / 30)];
+    const lpKey = SIGN_LORD[lgRashi];
+    chartData.LP = chartData[lpKey];
+  }
+  for (const planet of ['SU','MO']) {
+    if (chartData[planet] !== undefined) {
+      const rashi = RASHIS[Math.floor(normDeg(chartData[planet]) / 30)];
+      chartData[planet + '_DISP'] = chartData[SIGN_LORD[rashi]];
+    }
+  }
+  deriveBPValues();
+}
+
+function renderExtractedFields() {
+  const grid = document.getElementById('extracted-grid');
+  grid.innerHTML = '';
+  const fields = [
+    ['LG','Lagna (Ascendant)'],['SU','Sun'],['MO','Moon'],['MA','Mars'],
+    ['ME','Mercury'],['JU','Jupiter'],['VE','Venus'],['SA','Saturn'],['RA','Rahu']
+  ];
+  for (const [key, label] of fields) {
+    const val = chartData[key];
+    const div = document.createElement('div');
+    div.className = 'extracted-item';
+    div.innerHTML = `<label>${label} (${key})</label><input type="text" id="field-${key}" value="${val !== undefined ? longToRashi(val) : ''}" oninput="updateField('${key}', this.value)">`;
+    grid.appendChild(div);
+  }
+  const lpRashi = chartData.LG !== undefined ? RASHIS[Math.floor(normDeg(chartData.LG)/30)] : '?';
+  const lpLord = SIGN_LORD[lpRashi] || '?';
+  const lpDiv = document.createElement('div');
+  lpDiv.className = 'extracted-item';
+  lpDiv.innerHTML = `<label>LP — Lagna Pati (${lpLord})</label><input type="text" id="field-LP" value="${chartData.LP !== undefined ? longToRashi(chartData.LP) : ''}" oninput="updateField('LP', this.value)">`;
+  grid.appendChild(lpDiv);
+  document.getElementById('extracted-data').style.display = 'block';
+}
+
+function updateField(key, val) {
+  const lon = parseRashiDeg(val);
+  if (lon !== null) {
+    chartData[key] = lon;
+    if (['LG','SU','MO'].includes(key)) derivedValues();
+  }
+}
+
+// ─── Calculate all ────────────────────────────────────────────────────────────
+function calculateAll() {
+  const apiKey = document.getElementById('api-key').value.trim();
+  if (!apiKey) { showStatus('calc-status', 'error', 'Please enter your Anthropic API key.'); return; }
+  if (chartData.LG === undefined || chartData.SU === undefined || chartData.MO === undefined) {
+    showStatus('calc-status', 'error', 'Please upload and extract the astronomical data image first.'); return;
+  }
+  if (chartData.BM2 === undefined || chartData.BM6 === undefined || chartData.BM8 === undefined ||
+      chartData.BM9 === undefined || chartData.BM11 === undefined) {
+    showStatus('calc-status', 'error', 'Please upload and extract the house cusps image first (all BM values needed).'); return;
+  }
+  derivedValues();
+  const sahamas = getSahamas(chartData, dnMode);
+  renderResults(sahamas);
+  showStatus('calc-status', 'success', `✓ All 51 sahamas calculated (${dnMode === 'D' ? 'Diurnal' : 'Nocturnal'} chart).`);
+}
+
+function renderResults(sahamas) {
+  const tbody = document.getElementById('results-body');
+  tbody.innerHTML = '';
+  const lgDisplay = chartData.LG !== undefined ? longToRashi(chartData.LG) : '—';
+  document.getElementById('chart-info-bar').textContent =
+    `Lagna: ${lgDisplay}  ·  ${dnMode === 'D' ? 'Diurnal (D)' : 'Nocturnal (N)'}  ·  Sidereal (Nirayana)`;
+  for (const s of sahamas) {
+    const tr = document.createElement('tr');
+    if (s.num === 1) tr.className = 'punya-row';
+    let resultCell = '—', saikCell = '—';
+    if (s.data) {
+      resultCell = `<span class="result-deg">${longToRashi(s.data.result)}</span>`;
+      saikCell = s.data.saikatham
+        ? '<span class="saikatham-yes">Yes (+30°)</span>'
+        : '<span class="saikatham-no">No</span>';
+    }
+    tr.innerHTML = `
+      <td>${s.num}</td>
+      <td>${s.name}<br><span style="font-size:0.75rem;color:#9a8a72;font-style:italic">${s.sig}</span></td>
+      <td>${dnMode}</td>
+      <td class="formula-cell">${s.formula}</td>
+      <td>${resultCell}</td>
+      <td>${saikCell}</td>`;
+    tbody.appendChild(tr);
+  }
+  document.getElementById('results-section').style.display = 'block';
+  document.getElementById('results-section').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+// ─── Wire up all buttons via event listeners (no inline onclick) ──────────────
+document.addEventListener('DOMContentLoaded', function() {
+  // D/N toggle
+  document.getElementById('btn-day').addEventListener('click', () => setDN('D'));
+  document.getElementById('btn-night').addEventListener('click', () => setDN('N'));
+
+  // Choose file buttons
+  document.getElementById('choose-file-btn').addEventListener('click', function(e) {
+    e.stopPropagation();
+    document.getElementById('file-input').click();
+  });
+  document.getElementById('choose-file-bm-btn').addEventListener('click', function(e) {
+    e.stopPropagation();
+    document.getElementById('file-input-bm').click();
+  });
+
+  // Re-extract buttons
+  document.getElementById('re-extract-btn').addEventListener('click', extractFromImage);
+  document.getElementById('re-extract-bm-btn').addEventListener('click', extractBMFromImage);
+
+  // Calculate button
+  document.getElementById('calc-btn').addEventListener('click', calculateAll);
+
+  // Print button
+  document.querySelector('.btn-small[id]') // handled below
+  document.getElementById('print-btn') && document.getElementById('print-btn').addEventListener('click', () => window.print());
+
+  // Upload area focus on click
+  document.getElementById('upload-area').addEventListener('click', function() { this.focus(); });
+  document.getElementById('upload-area-bm').addEventListener('click', function() { this.focus(); });
+
+  // Drag events
+  document.getElementById('upload-area').addEventListener('dragover', e => { e.preventDefault(); document.getElementById('upload-area').classList.add('dragover'); });
+  document.getElementById('upload-area').addEventListener('dragleave', () => document.getElementById('upload-area').classList.remove('dragover'));
+  document.getElementById('upload-area').addEventListener('drop', e => { e.preventDefault(); document.getElementById('upload-area').classList.remove('dragover'); handleDrop(e, 'astro'); });
+  document.getElementById('upload-area').addEventListener('paste', e => handlePaste(e, 'astro'));
+
+  document.getElementById('upload-area-bm').addEventListener('dragover', e => { e.preventDefault(); document.getElementById('upload-area-bm').classList.add('dragover'); });
+  document.getElementById('upload-area-bm').addEventListener('dragleave', () => document.getElementById('upload-area-bm').classList.remove('dragover'));
+  document.getElementById('upload-area-bm').addEventListener('drop', e => { e.preventDefault(); document.getElementById('upload-area-bm').classList.remove('dragover'); handleDrop(e, 'bm'); });
+  document.getElementById('upload-area-bm').addEventListener('paste', e => handlePaste(e, 'bm'));
+
+  // File input change
+  document.getElementById('file-input').addEventListener('change', e => handleFileInput(e, 'astro'));
+  document.getElementById('file-input-bm').addEventListener('change', e => handleFileInput(e, 'bm'));
+});
+
+  const el = document.getElementById(id);
+  el.className = 'status ' + type;
+  el.innerHTML = msg;
+  el.style.display = 'block';
+}
+</script>
+</body>
+</html>
