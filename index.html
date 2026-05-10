@@ -923,16 +923,15 @@ function getSahamas(g, dn) {
 
   // #31 Karyasiddhi
   results.push({ num:31, name:'Kāryasiddhi', sig:'Expertise, success in a project',
-    formula: dn==='D' ? '(SA−SU)+SU disp.' : '(SA−MO)+MO disp.',
+    formula: '(SA−SU)+SU disp.',
     data: safe(() => {
-      if (dn==='D') return calcSahama(L('SA'), L('SU'), L('SU_DISP'));
-      else          return calcSahama(L('SA'), L('MO'), L('MO_DISP'));
+      return calcSahama(L('SA'), L('SU'), L('SU_DISP'));
     }, 'Karyasiddhi') });
 
-  results.push({ num:'31 alt', name:'Kāryasiddhi', sig:'Alternative formula (D only)', alt:true,
-    formula: dn==='D' ? '(SA−MO)+MO disp.' : '— (no alt for N)',
+  results.push({ num:'31 alt', name:'Kāryasiddhi', sig:'Alternative formula (N only)', alt:true,
+    formula: dn==='N' ? '(SA−MO)+MO disp.' : '— (alt applies to N only)',
     data: safe(() => {
-      if (dn==='D') return calcSahama(L('SA'), L('MO'), L('MO_DISP'));
+      if (dn==='N') return calcSahama(L('SA'), L('MO'), L('MO_DISP'));
       else          return null;
     }, 'KaryasiddhiAlt') });
 
