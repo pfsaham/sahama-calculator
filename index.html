@@ -1215,31 +1215,39 @@ async function extractFromImage() {
 
   const prompt = `You are reading an Astronomical Data table from Vedic astrology software (Shri Jyoti Star, Jagannatha Hora, or similar).
 
-IMPORTANT INSTRUCTIONS:
-- The table has a column called "Longitude" — this is the ONLY column you need
-- Longitudes are in the format DEGREES° MINUTES' SECONDS" — for example: 219° 35' 34"
-- The DEGREES value is always between 0 and 359
-- The MINUTES value is always between 0 and 59
-- The SECONDS value is always between 0 and 59
-- Read each row carefully — do NOT confuse the Longitude column with Latitude, Declination, Velocity or any other column
-- The Longitude column is always the SECOND column in the table, immediately after the planet name
-- Latitude values are much smaller numbers (often single digits or negative) — do NOT use these
-- The Ascendant row may be labeled "Ascendant", "Asc", or "As" — this gives LG
+CRITICAL INSTRUCTIONS — READ CAREFULLY:
 
-PLANET NAMES to look for (left column):
+THE TABLE STRUCTURE:
+- Each row has a Planet name on the left, followed by its Longitude, then Latitude
+- The Longitude is always 3 numbers: DEGREES, MINUTES, SECONDS — they may be spread apart with spaces between them
+- Example: "91° 55' 15"" means 91 degrees, 55 minutes, 15 seconds
+- The numbers may appear spread out like: "91°   55'   15"" — they still belong together on the same row
+- DEGREES are always between 0 and 359
+- MINUTES are always between 0 and 59  
+- SECONDS are always between 0 and 59
+- Latitude values are small (often 0° to 5°, sometimes negative) — do NOT mistake these for Longitude
+
+COMMON ERRORS TO AVOID:
+- Do NOT skip rows or mix up values between adjacent rows
+- Do NOT confuse the Latitude of one planet with the Longitude of the next
+- Small longitudes like 9°, 23°, 36° are valid — do not assume they must be larger
+- Read each row independently from left to right: Planet → Longitude degrees → Longitude minutes → Longitude seconds
+
+PLANET NAMES (left column):
 - Ascendant / Asc / As → LG
 - Sun / Su → SU
-- Moon / Mo → MO
+- Moon / Mo → MO  
 - Mars / Ma → MA
 - Mercury / Me → ME
 - Jupiter / Ju → JU
 - Venus / Ve → VE
 - Saturn / Sa → SA
-- Rahu / Ra → RA (if only Ketu shown, add 180° to get Rahu)
+- Rahu / Ra → RA (if only Ketu shown, add 180° to Ketu longitude to get Rahu)
+- Ignore Uranus, Neptune, Pluto
 
-Return ONLY this JSON object with the exact longitude values as they appear in the image:
+Return ONLY this JSON object with exact longitude values as they appear:
 {
-  "LG": "degrees° minutes' seconds\" e.g. 219° 35' 34\"",
+  "LG": "degrees° minutes' seconds\" e.g. 91° 55' 15\"",
   "SU": "...", "MO": "...", "MA": "...", "ME": "...",
   "JU": "...", "VE": "...", "SA": "...", "RA": "..."
 }
