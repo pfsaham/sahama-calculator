@@ -1212,19 +1212,38 @@ async function extractFromImage() {
   showStatus('extract-status', 'info', '<span class="spinner"></span> Reading chart image — extracting planetary longitudes...');
   document.getElementById('re-extract-spinner').style.display = 'inline-block';
 
-  const prompt = `This is an astronomical data table from Vedic astrology software (Jagannatha Hora, Parashara Light, or similar).
-Please extract the following from the image and return ONLY a JSON object, no explanation, no markdown:
+  const prompt = `You are reading an Astronomical Data table from Vedic astrology software (Shri Jyoti Star, Jagannatha Hora, or similar).
 
+IMPORTANT INSTRUCTIONS:
+- The table has a column called "Longitude" — this is the ONLY column you need
+- Longitudes are in the format DEGREES° MINUTES' SECONDS" — for example: 219° 35' 34"
+- The DEGREES value is always between 0 and 359
+- The MINUTES value is always between 0 and 59
+- The SECONDS value is always between 0 and 59
+- Read each row carefully — do NOT confuse the Longitude column with Latitude, Declination, Velocity or any other column
+- The Longitude column is always the SECOND column in the table, immediately after the planet name
+- Latitude values are much smaller numbers (often single digits or negative) — do NOT use these
+- The Ascendant row may be labeled "Ascendant", "Asc", or "As" — this gives LG
+
+PLANET NAMES to look for (left column):
+- Ascendant / Asc / As → LG
+- Sun / Su → SU
+- Moon / Mo → MO
+- Mars / Ma → MA
+- Mercury / Me → ME
+- Jupiter / Ju → JU
+- Venus / Ve → VE
+- Saturn / Sa → SA
+- Rahu / Ra → RA (if only Ketu shown, add 180° to get Rahu)
+
+Return ONLY this JSON object with the exact longitude values as they appear in the image:
 {
-  "LG": "absolute longitude e.g. 219°35'34\"",
+  "LG": "degrees° minutes' seconds\" e.g. 219° 35' 34\"",
   "SU": "...", "MO": "...", "MA": "...", "ME": "...",
   "JU": "...", "VE": "...", "SA": "...", "RA": "..."
 }
 
-Extract the Longitude column values exactly as shown. The Ascendant row gives LG.
-SU=Sun, MO=Moon, MA=Mars, ME=Mercury, JU=Jupiter, VE=Venus, SA=Saturn, RA=Rahu.
-If Ketu is shown instead of Rahu, compute Rahu as Ketu longitude + 180°.
-Return ONLY the JSON object.`;
+Return ONLY the JSON. No explanation. No markdown. No extra text.`;
 
   try {
     showStatus('extract-status', 'info', '<span class="spinner"></span> Connecting to Anthropic API...');
@@ -1291,20 +1310,27 @@ async function extractBMFromImage() {
   showStatus('bm-extract-status', 'info', '<span class="spinner"></span> Reading house cusps — extracting all 12 Bhāva Madhyas from the Centre column...');
   document.getElementById('re-extract-bm-spinner').style.display = 'inline-block';
 
-  const prompt = `This is a House Cusps (Chalit/Shri Pati) table from Vedic astrology software.
-The table has columns: Hs (house number), Centre (the Bhava Madhya), Nav, Nk, Start.
-Extract the Centre column values for all 12 houses and return ONLY this JSON object, no explanation, no markdown:
+  const prompt = `You are reading a House Cusps table (Chalit/Shri Pati system) from Vedic astrology software.
 
+IMPORTANT INSTRUCTIONS:
+- The table has these columns: Hs (house number 1-12), Centre, Nav, Nk, Start
+- You need ONLY the "Centre" column — this gives the Bhava Madhya (house cusp midpoint)
+- The Centre column shows a RASHI NAME followed by DEGREES and MINUTES — for example: Scorpio 9° 35'
+- Rashi names are: Aries, Taurus, Gemini, Cancer, Leo, Virgo, Libra, Scorpio, Sagittarius, Capricorn, Aquarius, Pisces
+- They may be abbreviated: Ari, Tau, Gem, Can, Leo, Vir, Lib, Sco, Sag, Cap, Aqu, Pis
+- Read each row carefully — house 1 through house 12 in order
+- Do NOT confuse the Centre column with the Start column
+
+Return ONLY this JSON object:
 {
-  "BM1":  "rashi and degrees e.g. Scorpio 9°35'",
+  "BM1":  "Rashi degrees° minutes' e.g. Scorpio 9° 35'",
   "BM2":  "...", "BM3":  "...", "BM4":  "...",
   "BM5":  "...", "BM6":  "...", "BM7":  "...",
   "BM8":  "...", "BM9":  "...", "BM10": "...",
   "BM11": "...", "BM12": "..."
 }
 
-The Centre column shows the rashi (sign) and degrees of each bhava madhya (house cusp midpoint).
-Return ONLY the JSON object.`;
+Return ONLY the JSON. No explanation. No markdown. No extra text.`;
 
   try {
     const response = await fetch('https://api.anthropic.com/v1/messages', {
