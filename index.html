@@ -474,10 +474,12 @@
     <div class="section">
       <div class="results-header">
         <h2 style="border:none; padding:0; margin:0;">Results — All 51 Sahamas</h2>
-        <div style="display:flex; gap:8px;">
+        <div style="display:flex; gap:8px; align-items:center;">
           <button class="btn btn-small" onclick="calculateAll()" style="background:#4a6a4a;">↻ Recalculate</button>
-          <button class="btn btn-small" onclick="window.print()">🖨 Print</button>
-          <button class="btn btn-small" onclick="savePDF()">💾 Save as PDF</button>
+          <div>
+            <button class="btn btn-small" onclick="window.print()">🖨 Print or Save as PDF</button>
+            <div style="font-size:0.75rem; color:#2a4a2a; margin-top:4px; font-style:italic;">To save as PDF: in the print dialog, change destination to "Save as PDF"</div>
+          </div>
         </div>
       </div>
       <div id="chart-info-bar" class="chart-info"></div>
