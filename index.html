@@ -361,14 +361,14 @@
   .api-note { font-size: 0.8rem; color: #2a4a2a; margin-top: 6px; font-style: italic; }
 
   @media print {
-    .section { display: none !important; }
-    #results-section { display: block !important; }
-    #results-section .section { display: block !important; }
-    .btn { display: none !important; }
-    header { display: block !important; }
-    body { font-size: 11px; }
-    table.results { font-size: 10px; }
+    body * { visibility: hidden; }
+    #results-section, #results-section * { visibility: visible; }
+    #results-section { position: absolute; left: 0; top: 0; width: 100%; }
     .results-header .btn-small { display: none !important; }
+    body { font-size: 11px; }
+    table.results { font-size: 10px; width: 100%; }
+    table.results td, table.results th { padding: 4px 6px; }
+    #results-errors { display: none !important; }
   }
 </style>
 </head>
@@ -477,7 +477,8 @@
         <h2 style="border:none; padding:0; margin:0;">Results — All 51 Sahamas</h2>
         <div style="display:flex; gap:8px;">
           <button class="btn btn-small" onclick="calculateAll()" style="background:#4a6a4a;">↻ Recalculate</button>
-          <button class="btn btn-small" id="print-btn" onclick="window.print()">Print / Save PDF</button>
+          <button class="btn btn-small" onclick="window.print()">🖨 Print</button>
+          <button class="btn btn-small" onclick="savePDF()">💾 Save as PDF</button>
         </div>
       </div>
       <div id="chart-info-bar" class="chart-info"></div>
@@ -1096,6 +1097,14 @@ function getSahamas(g, dn) {
     data: safe(() => calcSahama(L('BM11'), L('BP11'), L('LG')), 'Labha') });
 
   return results;
+}
+
+// ─── Save as PDF ──────────────────────────────────────────────────────────────
+function savePDF() {
+  const originalTitle = document.title;
+  document.title = 'Sahama_Results';
+  window.print();
+  document.title = originalTitle;
 }
 
 // ─── Help toggle ──────────────────────────────────────────────────────────────
