@@ -90,7 +90,7 @@
   }
   .upload-area:hover { background: #ede8dc; }
   .upload-area.dragover { background: #e8e0cc; border-color: var(--accent); }
-  .upload-area p { color: #6a8a6a; font-style: italic; margin-bottom: 10px; }
+  .upload-area p { color: #2a4a2a; font-style: italic; margin-bottom: 10px; }
   .upload-area input { display: none; }
 
   .btn {
@@ -176,7 +176,7 @@
     font-size: 0.85rem;
     cursor: pointer;
     border-radius: 3px;
-    color: #6a8a6a;
+    color: #2a4a2a;
     transition: all 0.15s;
   }
   .toggle-btn.active {
@@ -211,7 +211,7 @@
     transition: border-color 0.15s;
   }
   .bm-field input:focus { border-color: var(--accent); }
-  .bm-field .hint { font-size: 0.75rem; color: #7a9a7a; margin-top: 2px; font-style: italic; }
+  .bm-field .hint { font-size: 0.75rem; color: #2a4a2a; margin-top: 2px; font-style: italic; }
 
   /* Status messages */
   .status {
@@ -260,7 +260,7 @@
 
   .chart-info {
     font-size: 0.88rem;
-    color: #6a8a6a;
+    color: #2a4a2a;
     font-style: italic;
   }
 
@@ -276,17 +276,18 @@
 
   table.results thead tr {
     background: var(--header-bg);
-    color: var(--header-text);
+    color: #ffffff;
   }
 
   table.results thead th {
     padding: 9px 10px;
     text-align: left;
     font-family: Arial, Helvetica, sans-serif;
-    font-size: 0.75rem;
-    letter-spacing: 0.04em;
-    font-weight: 400;
+    font-size: 0.78rem;
+    letter-spacing: 0.02em;
+    font-weight: 700;
     white-space: nowrap;
+    color: #ffffff;
   }
 
   table.results thead th:first-child,
@@ -295,7 +296,7 @@
   table.results tbody tr:nth-child(even) { background: var(--alt-row); }
   table.results tbody tr:nth-child(odd) { background: var(--paper); }
   table.results tbody tr.punya-row {
-    background: #fff8e0 !important;
+    background: #d8ecd8 !important;
     font-weight: 600;
   }
 
@@ -303,9 +304,10 @@
     padding: 6px 10px;
     border-bottom: 1px solid var(--light-rule);
     vertical-align: middle;
+    color: #1a1a1a;
   }
 
-  table.results td:first-child { text-align: center; color: #6a8a6a; font-size: 0.82rem; }
+  table.results td:first-child { text-align: center; color: #2a4a2a; font-size: 0.85rem; font-weight: 600; }
   table.results td:nth-child(3) { text-align: center; }
 
   .result-deg {
@@ -315,23 +317,24 @@
   }
 
   .saikatham-yes {
-    color: #6a3c1e;
-    font-size: 0.8rem;
+    color: #2a4a2a;
+    font-size: 0.85rem;
+    font-weight: 600;
   }
   .saikatham-no {
-    color: #4a6a3c;
-    font-size: 0.8rem;
+    color: #2a4a2a;
+    font-size: 0.85rem;
   }
 
   .formula-cell {
-    font-size: 0.78rem;
-    color: #5a7a5a;
+    font-size: 0.80rem;
+    color: #2a3a2a;
     font-style: italic;
   }
 
   .print-note {
     font-size: 0.78rem;
-    color: #7a9a7a;
+    color: #3a5a3a;
     font-style: italic;
     margin-top: 14px;
   }
@@ -355,7 +358,7 @@
     outline: none;
   }
   .api-row input:focus { border-color: var(--accent); }
-  .api-note { font-size: 0.8rem; color: #7a9a7a; margin-top: 6px; font-style: italic; }
+  .api-note { font-size: 0.8rem; color: #2a4a2a; margin-top: 6px; font-style: italic; }
 
   @media print {
     .section { display: none !important; }
@@ -399,7 +402,7 @@
     <p style="font-size:0.9rem; color:#3a5a3a; margin-bottom:12px;">Take a clear, sharp screenshot of your Astronomical Data table — <strong>black and white preferred</strong>. For best accuracy <strong>crop your screenshot to show only the Planet name, Longitude and Latitude columns</strong> — exclude Declination, Rises, Sets, Vel/day and all columns to the right. Then drag it into the box below. You can also click <strong>Choose File</strong> as an alternative.</p>
     <div class="upload-area" id="upload-area" tabindex="0" style="padding:40px 30px;">
       <p style="font-size:1.05rem; font-weight:600; color:var(--accent); margin-bottom:8px;">⬇ Drag your screenshot here</p>
-      <p style="font-size:0.88rem; color:#6a8a6a; margin-bottom:14px;">— or —</p>
+      <p style="font-size:0.88rem; color:#2a4a2a; margin-bottom:14px;">— or —</p>
       <button class="btn btn-small" id="choose-file-btn" onclick="document.getElementById('file-input').click()">Choose File</button>
       <input type="file" id="file-input" accept="image/*" onchange="handleFileInput(event, 'astro')">
     </div>
@@ -424,7 +427,7 @@
     <p style="font-size:0.9rem; color:#3a5a3a; margin-bottom:12px;">Take a clear, sharp screenshot of your House Cusps (Chalit/Śhrī Pati) table — <strong>black and white preferred</strong>. Then drag it into the box below. You can also click <strong>Choose File</strong> as an alternative.</p>
     <div class="upload-area" id="upload-area-bm" tabindex="0" style="padding:40px 30px;">
       <p style="font-size:1.05rem; font-weight:600; color:var(--accent); margin-bottom:8px;">⬇ Drag your screenshot here</p>
-      <p style="font-size:0.88rem; color:#6a8a6a; margin-bottom:14px;">— or —</p>
+      <p style="font-size:0.88rem; color:#2a4a2a; margin-bottom:14px;">— or —</p>
       <button class="btn btn-small" id="choose-file-bm-btn" onclick="document.getElementById('file-input-bm').click()">Choose File</button>
       <input type="file" id="file-input-bm" accept="image/*" onchange="handleFileInput(event, 'bm')">
     </div>
@@ -451,7 +454,7 @@
       <button class="toggle-btn active" id="btn-day" onclick="setDN('D')">D — Diurnal (Sun above horizon)</button>
       <button class="toggle-btn" id="btn-night" onclick="setDN('N')">N — Nocturnal (Sun below horizon)</button>
     </div>
-    <p style="font-size:0.85rem; color:#6a8a6a; font-style:italic;">The highlighted button shows the active selection. D (Diurnal) is selected by default — click N if your chart is nocturnal.</p>
+    <p style="font-size:0.85rem; color:#2a4a2a; font-style:italic;">The highlighted button shows the active selection. D (Diurnal) is selected by default — click N if your chart is nocturnal.</p>
   </div>
 
   <!-- Calculate -->
@@ -504,7 +507,7 @@
 
     <div style="background:var(--paper); border:1px solid var(--light-rule); border-radius:4px; padding:18px 20px; margin-bottom:18px;">
       <h3 style="font-family:Arial,Helvetica,sans-serif; font-size:0.95rem; color:var(--accent); margin-bottom:8px;">Part 1 — Getting Your API Key</h3>
-      <p style="margin-bottom:10px; font-style:italic; color:#6a8a6a;">Good news — you only need to do this once. After your account is set up, you simply paste your key and go.</p>
+      <p style="margin-bottom:10px; font-style:italic; color:#2a4a2a;">Good news — you only need to do this once. After your account is set up, you simply paste your key and go.</p>
       <p style="margin-bottom:10px;"><strong>What is an API key?</strong> This tool uses an AI engine provided by <strong>Anthropic</strong> to read your chart images and extract all planetary positions automatically. To use their AI you need a personal password called an API key. Anthropic's website generates this key for you automatically when you create a free account.</p>
       <p style="margin-bottom:6px;"><strong>Step-by-step:</strong></p>
       <ol style="margin-left:20px; margin-bottom:12px; line-height:2;">
@@ -532,7 +535,7 @@
         <li>Your initial $5.00 deposit will last most students <strong>years</strong> of regular use</li>
         <li>There is no monthly fee and no subscription — you only spend money when you actually use the tool</li>
       </ul>
-      <p style="font-size:0.88rem; color:#6a8a6a; font-style:italic;">To put it in perspective: doing one chart per week for an entire year would cost approximately 50 cents.</p>
+      <p style="font-size:0.88rem; color:#2a4a2a; font-style:italic;">To put it in perspective: doing one chart per week for an entire year would cost approximately 50 cents.</p>
     </div>
 
     <div style="background:var(--paper); border:1px solid var(--light-rule); border-radius:4px; padding:18px 20px;">
@@ -1504,12 +1507,12 @@ function renderResults(sahamas) {
     }
 
     const numDisplay = s.alt
-      ? `<span style="font-size:0.75rem; color:#7a9a7a;">↳ alt</span>`
+      ? `<span style="font-size:0.75rem; color:#2a4a2a;">↳ alt</span>`
       : s.num;
 
     const nameDisplay = s.alt
-      ? `<span style="color:#6a8a6a;">${s.name}</span><br><span style="font-size:0.75rem;color:#7a9a7a;">${s.sig}</span>`
-      : `${s.name}<br><span style="font-size:0.75rem;color:#7a9a7a;">${s.sig}</span>`;
+      ? `<span style="color:#1a1a1a;">${s.name}</span><br><span style="font-size:0.75rem;color:#2a4a2a;">${s.sig}</span>`
+      : `${s.name}<br><span style="font-size:0.75rem;color:#2a4a2a;">${s.sig}</span>`;
 
     tr.innerHTML = `
       <td>${numDisplay}</td>
