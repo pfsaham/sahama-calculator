@@ -899,8 +899,8 @@ function getSahamas(g, dn) {
 
   // #25 Mrtyu — D or N same
   results.push({ num:25, name:'Mṛtyu', sig:'Death, mortality',
-    formula: '(BM8−MO)+LG',
-    data: safe(() => calcSahama(L('BM8'), L('MO'), L('LG')), 'Mrtyu') });
+    formula: '(BM8−MO)+SA',
+    data: safe(() => calcSahama(L('BM8'), L('MO'), L('SA')), 'Mrtyu') });
 
   // #26 Parades'a — D or N same
   results.push({ num:26, name:'Paradeśa (Deśāntara)', sig:'Foreign countries',
@@ -1522,7 +1522,7 @@ function renderResults(sahamas) {
 
     const nameDisplay = s.alt
       ? `<span style="color:#1a1a1a;">${s.name}</span><br><span style="font-size:0.75rem;color:#2a4a2a;">${s.sig}</span>`
-      : `${s.name}<br><span style="font-size:0.75rem;color:#2a4a2a;">${s.sig}</span>`;
+      : `<span style="font-weight:700; font-size:0.95rem; color:#1a1a1a;">${s.name}</span><br><span style="font-size:0.75rem;color:#2a4a2a;">${s.sig}</span>`;
 
     tr.innerHTML = `
       <td>${numDisplay}</td>
