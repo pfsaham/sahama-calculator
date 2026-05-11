@@ -5,30 +5,29 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Tājika Sahama Calculator</title>
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,600;1,400&family=Cinzel:wght@400;600&display=swap');
 
   :root {
     --ink: #1a1a1a;
     --paper: #faf8f3;
     --parchment: #f0ead8;
-    --rule: #c8b89a;
-    --accent: #5c3d1e;
-    --gold: #8b6914;
-    --light-rule: #e0d8c8;
-    --header-bg: #2c2018;
-    --header-text: #f0e4c8;
-    --alt-row: #f5f0e8;
-    --yes-bg: #f8f0e8;
-    --no-bg: #f0f5e8;
+    --rule: #8aab8a;
+    --accent: #5a7a5a;
+    --gold: #5a7a5a;
+    --light-rule: #d0e0d0;
+    --header-bg: #3a5a3a;
+    --header-text: #f0f5f0;
+    --alt-row: #f0f5f0;
+    --yes-bg: #f0f5f0;
+    --no-bg: #f0f5f0;
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
 
   body {
-    font-family: 'EB Garamond', Georgia, serif;
+    font-family: Arial, Helvetica, sans-serif;
     background: var(--paper);
     color: var(--ink);
-    font-size: 16px;
+    font-size: 15px;
     line-height: 1.5;
   }
 
@@ -37,20 +36,21 @@
     color: var(--header-text);
     text-align: center;
     padding: 28px 20px 20px;
-    border-bottom: 3px solid var(--gold);
+    border-bottom: 3px solid var(--accent);
   }
 
   header h1 {
-    font-family: 'Cinzel', serif;
-    font-size: 1.9rem;
-    letter-spacing: 0.04em;
-    color: #f0e4c8;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 1.7rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    color: #f0f5f0;
     margin-bottom: 6px;
   }
 
   header p {
     font-size: 0.95rem;
-    color: #c8b89a;
+    color: #8aab8a;
     font-style: italic;
   }
 
@@ -69,7 +69,7 @@
   }
 
   .section h2 {
-    font-family: 'Cinzel', serif;
+    font-family: Arial, Helvetica, sans-serif;
     font-size: 1.05rem;
     color: var(--accent);
     border-bottom: 1px solid var(--rule);
@@ -90,23 +90,23 @@
   }
   .upload-area:hover { background: #ede8dc; }
   .upload-area.dragover { background: #e8e0cc; border-color: var(--accent); }
-  .upload-area p { color: #7a6a52; font-style: italic; margin-bottom: 10px; }
+  .upload-area p { color: #6a8a6a; font-style: italic; margin-bottom: 10px; }
   .upload-area input { display: none; }
 
   .btn {
     display: inline-block;
     background: var(--accent);
-    color: #f0e4c8;
+    color: #f0f5f0;
     border: none;
     padding: 9px 22px;
-    font-family: 'Cinzel', serif;
+    font-family: Arial, Helvetica, sans-serif;
     font-size: 0.85rem;
     letter-spacing: 0.05em;
     cursor: pointer;
     border-radius: 3px;
     transition: background 0.2s;
   }
-  .btn:hover { background: #7a5228; }
+  .btn:hover { background: var(--accent); }
   .btn:disabled { background: #a09080; cursor: not-allowed; }
   .btn-small {
     padding: 6px 14px;
@@ -141,13 +141,13 @@
     color: var(--accent);
     display: block;
     font-size: 0.8rem;
-    font-family: 'Cinzel', serif;
+    font-family: Arial, Helvetica, sans-serif;
   }
   .extracted-item input {
     width: 100%;
     border: none;
     background: transparent;
-    font-family: 'EB Garamond', serif;
+    font-family: Arial, Helvetica, sans-serif;
     font-size: 0.95rem;
     color: var(--ink);
     outline: none;
@@ -164,7 +164,7 @@
     margin-bottom: 16px;
   }
   .dn-toggle label {
-    font-family: 'Cinzel', serif;
+    font-family: Arial, Helvetica, sans-serif;
     font-size: 0.9rem;
     color: var(--accent);
   }
@@ -172,17 +172,17 @@
     padding: 7px 20px;
     border: 2px solid var(--rule);
     background: var(--paper);
-    font-family: 'Cinzel', serif;
+    font-family: Arial, Helvetica, sans-serif;
     font-size: 0.85rem;
     cursor: pointer;
     border-radius: 3px;
-    color: #7a6a52;
+    color: #6a8a6a;
     transition: all 0.15s;
   }
   .toggle-btn.active {
     background: var(--accent);
     border-color: var(--accent);
-    color: #f0e4c8;
+    color: #f0f5f0;
   }
 
   /* BM inputs */
@@ -193,7 +193,7 @@
   }
   .bm-field label {
     display: block;
-    font-family: 'Cinzel', serif;
+    font-family: Arial, Helvetica, sans-serif;
     font-size: 0.78rem;
     color: var(--accent);
     margin-bottom: 4px;
@@ -203,7 +203,7 @@
     padding: 7px 10px;
     border: 1px solid var(--rule);
     border-radius: 3px;
-    font-family: 'EB Garamond', serif;
+    font-family: Arial, Helvetica, sans-serif;
     font-size: 0.95rem;
     background: var(--paper);
     color: var(--ink);
@@ -211,7 +211,7 @@
     transition: border-color 0.15s;
   }
   .bm-field input:focus { border-color: var(--accent); }
-  .bm-field .hint { font-size: 0.75rem; color: #9a8a72; margin-top: 2px; font-style: italic; }
+  .bm-field .hint { font-size: 0.75rem; color: #7a9a7a; margin-top: 2px; font-style: italic; }
 
   /* Status messages */
   .status {
@@ -229,7 +229,7 @@
   .spinner {
     display: inline-block;
     width: 14px; height: 14px;
-    border: 2px solid #c8b89a;
+    border: 2px solid #8aab8a;
     border-top-color: var(--accent);
     border-radius: 50%;
     animation: spin 0.7s linear infinite;
@@ -260,7 +260,7 @@
 
   .chart-info {
     font-size: 0.88rem;
-    color: #7a6a52;
+    color: #6a8a6a;
     font-style: italic;
   }
 
@@ -282,7 +282,7 @@
   table.results thead th {
     padding: 9px 10px;
     text-align: left;
-    font-family: 'Cinzel', serif;
+    font-family: Arial, Helvetica, sans-serif;
     font-size: 0.75rem;
     letter-spacing: 0.04em;
     font-weight: 400;
@@ -305,7 +305,7 @@
     vertical-align: middle;
   }
 
-  table.results td:first-child { text-align: center; color: #7a6a52; font-size: 0.82rem; }
+  table.results td:first-child { text-align: center; color: #6a8a6a; font-size: 0.82rem; }
   table.results td:nth-child(3) { text-align: center; }
 
   .result-deg {
@@ -325,13 +325,13 @@
 
   .formula-cell {
     font-size: 0.78rem;
-    color: #6a5a42;
+    color: #5a7a5a;
     font-style: italic;
   }
 
   .print-note {
     font-size: 0.78rem;
-    color: #9a8a72;
+    color: #7a9a7a;
     font-style: italic;
     margin-top: 14px;
   }
@@ -349,13 +349,13 @@
     padding: 7px 10px;
     border: 1px solid var(--rule);
     border-radius: 3px;
-    font-family: 'EB Garamond', serif;
+    font-family: Arial, Helvetica, sans-serif;
     font-size: 0.95rem;
     background: var(--paper);
     outline: none;
   }
   .api-row input:focus { border-color: var(--accent); }
-  .api-note { font-size: 0.8rem; color: #9a8a72; margin-top: 6px; font-style: italic; }
+  .api-note { font-size: 0.8rem; color: #7a9a7a; margin-top: 6px; font-style: italic; }
 
   @media print {
     .section { display: none !important; }
@@ -379,14 +379,14 @@
 <div class="container">
 
   <!-- INTRO -->
-  <div style="background:var(--parchment); border:1px solid var(--rule); border-radius:4px; padding:16px 24px; margin-bottom:22px; font-size:0.95rem; color:#5a4a32; line-height:1.7;">
+  <div style="background:var(--parchment); border:1px solid var(--rule); border-radius:4px; padding:16px 24px; margin-bottom:22px; font-size:0.95rem; color:#3a5a3a; line-height:1.7;">
     This tool is designed to be simple and fast. It is essential that you first paste your API key in the designated box below. See the <a href="#setup-guide" style="color:var(--accent); font-weight:600;">Setup Guide</a> at the bottom of this page for how to generate your key and more detailed guidance on the subsequent steps if needed.
   </div>
 
   <!-- API Key -->
   <div class="section">
     <h2>API Key</h2>
-    <p style="margin-bottom:12px; font-size:0.92rem; color:#5a4a32;">Paste your Anthropic API key in the box below. Don't have one yet? See the <a href="#setup-guide" style="color:var(--accent);">Setup Guide</a> at the bottom of this page.</p>
+    <p style="margin-bottom:12px; font-size:0.92rem; color:#3a5a3a;">Paste your Anthropic API key in the box below. Don't have one yet? See the <a href="#setup-guide" style="color:var(--accent);">Setup Guide</a> at the bottom of this page.</p>
     <div class="api-row">
       <input type="password" id="api-key" placeholder="Paste your key here — it looks like: sk-ant-api03-xxxx..." />
     </div>
@@ -396,10 +396,10 @@
   <!-- Chart Upload -->
   <div class="section">
     <h2>Step 1 — Astronomical Data Table</h2>
-    <p style="font-size:0.9rem; color:#5a4a32; margin-bottom:12px;">Take a clear, sharp screenshot of your Astronomical Data table — <strong>black and white preferred</strong>. For best accuracy <strong>crop your screenshot to show only the Planet name, Longitude and Latitude columns</strong> — exclude Declination, Rises, Sets, Vel/day and all columns to the right. Then drag it into the box below. You can also click <strong>Choose File</strong> as an alternative.</p>
+    <p style="font-size:0.9rem; color:#3a5a3a; margin-bottom:12px;">Take a clear, sharp screenshot of your Astronomical Data table — <strong>black and white preferred</strong>. For best accuracy <strong>crop your screenshot to show only the Planet name, Longitude and Latitude columns</strong> — exclude Declination, Rises, Sets, Vel/day and all columns to the right. Then drag it into the box below. You can also click <strong>Choose File</strong> as an alternative.</p>
     <div class="upload-area" id="upload-area" tabindex="0" style="padding:40px 30px;">
       <p style="font-size:1.05rem; font-weight:600; color:var(--accent); margin-bottom:8px;">⬇ Drag your screenshot here</p>
-      <p style="font-size:0.88rem; color:#7a6a52; margin-bottom:14px;">— or —</p>
+      <p style="font-size:0.88rem; color:#6a8a6a; margin-bottom:14px;">— or —</p>
       <button class="btn btn-small" id="choose-file-btn" onclick="document.getElementById('file-input').click()">Choose File</button>
       <input type="file" id="file-input" accept="image/*" onchange="handleFileInput(event, 'astro')">
     </div>
@@ -407,10 +407,10 @@
     <div id="extract-status" class="status"></div>
     <div id="extracted-data" style="display:none; margin-top:16px;">
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
-        <span style="font-family:'Cinzel',serif; font-size:0.85rem; color:var(--accent);">Extracted Longitudes — Verify Before Calculating</span>
+        <span style="font-family:Arial,Helvetica,sans-serif; font-size:0.85rem; color:var(--accent);">Extracted Longitudes — Verify Before Calculating</span>
         </div>
         <div style="background:#fff8e0; border:1px solid #d4a800; border-radius:3px; padding:10px 14px; margin-bottom:10px; font-size:0.88rem;">
-          ⚠️ The accuracy of extracted longitudes depends on the clarity of your screenshot. Misreads most commonly affect the minutes. Scan the minutes column of each extracted value against your original table for a possible mismatch before hitting Calculate.
+          ⚠️ The accuracy of extracted longitudes depends on the clarity of your screenshot. Misreads most commonly affect the minutes. Scan the minutes column of each extracted value against your original table for a possible mismatch before hitting Calculate. <strong>Pay particular attention to planets whose longitude is less than 100° (single or double digit degrees) — these are the most prone to extraction errors.</strong>
         </div>
         <button class="btn btn-small" id="re-extract-btn" onclick="extractFromImage()"><span id="re-extract-spinner" style="display:none" class="spinner"></span>Re-extract</button>
       </div>
@@ -421,10 +421,10 @@
   <!-- House Cusps Upload -->
   <div class="section">
     <h2>Step 2 — House Cusps Table (Chalit/Śhrī Pati)</h2>
-    <p style="font-size:0.9rem; color:#5a4a32; margin-bottom:12px;">Take a clear, sharp screenshot of your House Cusps (Chalit/Śhrī Pati) table — <strong>black and white preferred</strong>. Then drag it into the box below. You can also click <strong>Choose File</strong> as an alternative.</p>
+    <p style="font-size:0.9rem; color:#3a5a3a; margin-bottom:12px;">Take a clear, sharp screenshot of your House Cusps (Chalit/Śhrī Pati) table — <strong>black and white preferred</strong>. Then drag it into the box below. You can also click <strong>Choose File</strong> as an alternative.</p>
     <div class="upload-area" id="upload-area-bm" tabindex="0" style="padding:40px 30px;">
       <p style="font-size:1.05rem; font-weight:600; color:var(--accent); margin-bottom:8px;">⬇ Drag your screenshot here</p>
-      <p style="font-size:0.88rem; color:#7a6a52; margin-bottom:14px;">— or —</p>
+      <p style="font-size:0.88rem; color:#6a8a6a; margin-bottom:14px;">— or —</p>
       <button class="btn btn-small" id="choose-file-bm-btn" onclick="document.getElementById('file-input-bm').click()">Choose File</button>
       <input type="file" id="file-input-bm" accept="image/*" onchange="handleFileInput(event, 'bm')">
     </div>
@@ -432,10 +432,10 @@
     <div id="bm-extract-status" class="status"></div>
     <div id="bm-extracted-data" style="display:none; margin-top:16px;">
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
-        <span style="font-family:'Cinzel',serif; font-size:0.85rem; color:var(--accent);">Extracted Bhāva Madhyas — Verify Before Calculating</span>
+        <span style="font-family:Arial,Helvetica,sans-serif; font-size:0.85rem; color:var(--accent);">Extracted Bhāva Madhyas — Verify Before Calculating</span>
         </div>
         <div style="background:#fff8e0; border:1px solid #d4a800; border-radius:3px; padding:10px 14px; margin-bottom:10px; font-size:0.88rem;">
-          ⚠️ The accuracy of extracted longitudes depends on the clarity of your screenshot. Misreads most commonly affect the minutes. Scan the minutes column of each extracted value against your original table for a possible mismatch before hitting Calculate.
+          ⚠️ The accuracy of extracted longitudes depends on the clarity of your screenshot. Misreads most commonly affect the minutes. Scan the minutes column of each extracted value against your original table for a possible mismatch before hitting Calculate. <strong>Pay particular attention to planets whose longitude is less than 100° (single or double digit degrees) — these are the most prone to extraction errors.</strong>
         </div>
         <button class="btn btn-small" id="re-extract-bm-btn" onclick="extractBMFromImage()"><span id="re-extract-bm-spinner" style="display:none" class="spinner"></span>Re-extract</button>
       </div>
@@ -451,7 +451,7 @@
       <button class="toggle-btn active" id="btn-day" onclick="setDN('D')">D — Diurnal (Sun above horizon)</button>
       <button class="toggle-btn" id="btn-night" onclick="setDN('N')">N — Nocturnal (Sun below horizon)</button>
     </div>
-    <p style="font-size:0.85rem; color:#7a6a52; font-style:italic;">The highlighted button shows the active selection. D (Diurnal) is selected by default — click N if your chart is nocturnal.</p>
+    <p style="font-size:0.85rem; color:#6a8a6a; font-style:italic;">The highlighted button shows the active selection. D (Diurnal) is selected by default — click N if your chart is nocturnal.</p>
   </div>
 
   <!-- Calculate -->
@@ -472,7 +472,8 @@
     <div class="section">
       <div class="results-header">
         <h2 style="border:none; padding:0; margin:0;">Results — All 51 Sahamas</h2>
-        <div>
+        <div style="display:flex; gap:8px;">
+          <button class="btn btn-small" onclick="calculateAll()" style="background:#4a6a4a;">↻ Recalculate</button>
           <button class="btn btn-small" id="print-btn" onclick="window.print()">Print / Save PDF</button>
         </div>
       </div>
@@ -501,8 +502,8 @@
     <h2>&#9432; Setup Guide</h2>
 
     <div style="background:var(--paper); border:1px solid var(--light-rule); border-radius:4px; padding:18px 20px; margin-bottom:18px;">
-      <h3 style="font-family:'Cinzel',serif; font-size:0.95rem; color:var(--accent); margin-bottom:8px;">Part 1 — Getting Your API Key</h3>
-      <p style="margin-bottom:10px; font-style:italic; color:#7a6a52;">Good news — you only need to do this once. After your account is set up, you simply paste your key and go.</p>
+      <h3 style="font-family:Arial,Helvetica,sans-serif; font-size:0.95rem; color:var(--accent); margin-bottom:8px;">Part 1 — Getting Your API Key</h3>
+      <p style="margin-bottom:10px; font-style:italic; color:#6a8a6a;">Good news — you only need to do this once. After your account is set up, you simply paste your key and go.</p>
       <p style="margin-bottom:10px;"><strong>What is an API key?</strong> This tool uses an AI engine provided by <strong>Anthropic</strong> to read your chart images and extract all planetary positions automatically. To use their AI you need a personal password called an API key. Anthropic's website generates this key for you automatically when you create a free account.</p>
       <p style="margin-bottom:6px;"><strong>Step-by-step:</strong></p>
       <ol style="margin-left:20px; margin-bottom:12px; line-height:2;">
@@ -523,24 +524,25 @@
     </div>
 
     <div style="background:var(--paper); border:1px solid var(--light-rule); border-radius:4px; padding:18px 20px; margin-bottom:18px;">
-      <h3 style="font-family:'Cinzel',serif; font-size:0.95rem; color:var(--accent); margin-bottom:12px;">Part 2 — What Does It Cost?</h3>
+      <h3 style="font-family:Arial,Helvetica,sans-serif; font-size:0.95rem; color:var(--accent); margin-bottom:12px;">Part 2 — What Does It Cost?</h3>
       <p style="margin-bottom:8px;">Using this tool is not free, but it is extremely inexpensive.</p>
       <ul style="margin-left:20px; line-height:2; margin-bottom:10px;">
         <li>Each chart calculation costs roughly <strong>one cent or less</strong></li>
         <li>Your initial $5.00 deposit will last most students <strong>years</strong> of regular use</li>
         <li>There is no monthly fee and no subscription — you only spend money when you actually use the tool</li>
       </ul>
-      <p style="font-size:0.88rem; color:#7a6a52; font-style:italic;">To put it in perspective: doing one chart per week for an entire year would cost approximately 50 cents.</p>
+      <p style="font-size:0.88rem; color:#6a8a6a; font-style:italic;">To put it in perspective: doing one chart per week for an entire year would cost approximately 50 cents.</p>
     </div>
 
     <div style="background:var(--paper); border:1px solid var(--light-rule); border-radius:4px; padding:18px 20px;">
-      <h3 style="font-family:'Cinzel',serif; font-size:0.95rem; color:var(--accent); margin-bottom:12px;">Part 3 — Tips for Best Results</h3>
+      <h3 style="font-family:Arial,Helvetica,sans-serif; font-size:0.95rem; color:var(--accent); margin-bottom:12px;">Part 3 — Tips for Best Results</h3>
       <ul style="margin-left:20px; line-height:2; margin-bottom:0;">
         <li>Take screenshots using <strong>Command+Shift+4</strong> on a Mac to select just the table area</li>
         <li>For best accuracy <strong>crop your screenshot to show only the Planet name, Longitude and Latitude columns</strong> — exclude Declination, Rises, Sets, Vel/day and all columns to the right</li>
         <li>Black and white screenshots give better extraction accuracy than multicolour</li>
         <li>Make sure your screenshot is sharp and clear — blurry images lead to misreads</li>
         <li>After extraction always scan the <strong>minutes column</strong> of each value against your original table — misreads most commonly affect the minutes</li>
+        <li><strong>Pay special attention to planets with small longitudes</strong> (less than 100° — single or double digit degrees) — these are the most prone to extraction errors and should always be verified carefully</li>
         <li>All extracted fields are editable — simply click and correct any value before calculating</li>
         <li>D (Diurnal) is selected by default — only click N if your chart is nocturnal</li>
         <li>Use the Print / Save PDF button to save your results</li>
@@ -1227,11 +1229,11 @@ THE TABLE STRUCTURE:
 - SECONDS are always between 0 and 59
 - Latitude values are small (often 0° to 5°, sometimes negative) — do NOT mistake these for Longitude
 
-COMMON ERRORS TO AVOID:
-- Do NOT skip rows or mix up values between adjacent rows
-- Do NOT confuse the Latitude of one planet with the Longitude of the next
-- Small longitudes like 9°, 23°, 36° are valid — do not assume they must be larger
-- Read each row independently from left to right: Planet → Longitude degrees → Longitude minutes → Longitude seconds
+SPECIAL ATTENTION — SMALL LONGITUDES:
+- Some planets have very small longitudes like 4°, 9°, 23°, 36° — these are completely valid
+- When the degrees column has only 1 or 2 digits, there will be extra white space before it — do NOT skip these or assign them to the wrong planet
+- A longitude of 4° 5' 17" is just as valid as 340° 59' 9"
+- Double-check every planet whose degrees value is less than 100 — these are the most error-prone
 
 PLANET NAMES (left column):
 - Ascendant / Asc / As → LG
@@ -1490,12 +1492,12 @@ function renderResults(sahamas) {
     }
 
     const numDisplay = s.alt
-      ? `<span style="font-size:0.75rem; color:#9a8a72;">↳ alt</span>`
+      ? `<span style="font-size:0.75rem; color:#7a9a7a;">↳ alt</span>`
       : s.num;
 
     const nameDisplay = s.alt
-      ? `<span style="color:#7a6a52;">${s.name}</span><br><span style="font-size:0.75rem;color:#9a8a72;">${s.sig}</span>`
-      : `${s.name}<br><span style="font-size:0.75rem;color:#9a8a72;">${s.sig}</span>`;
+      ? `<span style="color:#6a8a6a;">${s.name}</span><br><span style="font-size:0.75rem;color:#7a9a7a;">${s.sig}</span>`
+      : `${s.name}<br><span style="font-size:0.75rem;color:#7a9a7a;">${s.sig}</span>`;
 
     tr.innerHTML = `
       <td>${numDisplay}</td>
