@@ -410,7 +410,7 @@
         <span style="font-family:Arial,Helvetica,sans-serif; font-size:0.85rem; color:var(--accent);">Extracted Longitudes — Verify Before Calculating</span>
         </div>
         <div style="background:#fff8e0; border:1px solid #d4a800; border-radius:3px; padding:10px 14px; margin-bottom:10px; font-size:0.88rem;">
-          ⚠️ The accuracy of extracted longitudes depends on the clarity of your screenshot. Misreads most commonly affect the minutes. Scan the minutes column of each extracted value against your original table for a possible mismatch before hitting Calculate. <strong>Pay particular attention to planets whose longitude is less than 100° (single or double digit degrees) — these are the most prone to extraction errors.</strong>
+          ⚠️ The accuracy of extracted longitudes depends on the clarity of your screenshot. Misreads most commonly affect the minutes. Scan the minutes column of each extracted value against your original table for a possible mismatch before hitting Calculate. <strong>Pay particular attention to planets whose longitude is less than 100° (single or double digit degrees) — these are the most prone to extraction errors. If you spot a mismatch, simply click on that value in the fields below and type the correct longitude before hitting Calculate.</strong>
         </div>
         <button class="btn btn-small" id="re-extract-btn" onclick="extractFromImage()"><span id="re-extract-spinner" style="display:none" class="spinner"></span>Re-extract</button>
       </div>
@@ -435,7 +435,7 @@
         <span style="font-family:Arial,Helvetica,sans-serif; font-size:0.85rem; color:var(--accent);">Extracted Bhāva Madhyas — Verify Before Calculating</span>
         </div>
         <div style="background:#fff8e0; border:1px solid #d4a800; border-radius:3px; padding:10px 14px; margin-bottom:10px; font-size:0.88rem;">
-          ⚠️ The accuracy of extracted longitudes depends on the clarity of your screenshot. Misreads most commonly affect the minutes. Scan the minutes column of each extracted value against your original table for a possible mismatch before hitting Calculate. <strong>Pay particular attention to planets whose longitude is less than 100° (single or double digit degrees) — these are the most prone to extraction errors.</strong>
+          ⚠️ The accuracy of extracted longitudes depends on the clarity of your screenshot. Misreads most commonly affect the minutes. Scan the minutes column of each extracted value against your original table for a possible mismatch before hitting Calculate. <strong>Pay particular attention to planets whose longitude is less than 100° (single or double digit degrees) — these are the most prone to extraction errors. If you spot a mismatch, simply click on that value in the fields below and type the correct longitude before hitting Calculate.</strong>
         </div>
         <button class="btn btn-small" id="re-extract-bm-btn" onclick="extractBMFromImage()"><span id="re-extract-bm-spinner" style="display:none" class="spinner"></span>Re-extract</button>
       </div>
@@ -478,6 +478,7 @@
         </div>
       </div>
       <div id="chart-info-bar" class="chart-info"></div>
+      <div id="results-errors" style="display:none; background:#fdf0f0; border:1px solid #c8a0a0; border-radius:3px; padding:10px 14px; margin:10px 0; font-size:0.88rem; color:#6a2020;"></div>
       <div class="results-table-wrap" style="margin-top:12px;">
         <table class="results" id="results-table">
           <thead>
@@ -1478,6 +1479,17 @@ function renderResults(sahamas) {
   const lgDisplay = chartData.LG !== undefined ? longToRashi(chartData.LG) : '—';
   document.getElementById('chart-info-bar').textContent =
     `Lagna: ${lgDisplay}  ·  ${dnMode === 'D' ? 'Diurnal (D)' : 'Nocturnal (N)'}  ·  Sidereal (Nirayana)`;
+
+  // Collect errors
+  const errors = sahamas.filter(s => !s.data && !s.alt).map(s => s.name);
+  const errBox = document.getElementById('results-errors');
+  if (errors.length > 0) {
+    errBox.style.display = 'block';
+    errBox.innerHTML = `⚠️ <strong>The following sahamas could not be calculated</strong> — check that all required planetary longitudes were correctly extracted: <em>${errors.join(', ')}</em>`;
+  } else {
+    errBox.style.display = 'none';
+  }
+
   for (const s of sahamas) {
     const tr = document.createElement('tr');
     if (s.num === 1) tr.className = 'punya-row';
